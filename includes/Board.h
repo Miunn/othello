@@ -1,7 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-typedef enum
+typedef enum: unsigned short
 {
     EMPTY = 0,
     WHITE = 1,
@@ -15,11 +15,12 @@ friend std::ostream & operator<<(std::ostream &, const Board &P);
     public: 
     Board();
     ~Board();
-    void setPawnAtCord(Pawn color, char col, int row);
+    void setCoord(const Pawn& color, const std::string& coord);
+    Pawn getCoord(const std::string& coord) const;
         
     private:
     int size;
-    int *board;
+    Pawn *board;
 
 };
 
