@@ -1,5 +1,4 @@
 #include <iostream>
-#include "../includes/Pawn.h"
 #include "../includes/Board.h"
 
 using namespace std;

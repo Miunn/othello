@@ -1,6 +1,5 @@
 #include <iostream>
 #include "../includes/Board.h"
-#include "../includes/Pawn.h"
 
 using namespace std;
 
@@ -8,7 +7,7 @@ ostream &operator<<(ostream &out, const Board &B)
 {
     for (int i = 0; i < B.size; i++) {
         for (int j = 0; j < B.size; j++) {
-            out << B.board[i*B.size + j]->getColor() << " ";
+            out << B.board[i*B.size + j] << " ";
         }
         out << endl;
     }
@@ -18,18 +17,12 @@ ostream &operator<<(ostream &out, const Board &B)
 Board::Board()
 {
     size = 8;
-    board = (Pawn**) malloc(size * size * sizeof(Pawn*));
+    board = (int*) calloc(size * size, sizeof(int));
 
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            board[i*size + j] = new Pawn();
-        }
-    }
-
-    setPawnAtCord(1, 'd', 4);
-    setPawnAtCord(1, 'e', 5);
-    setPawnAtCord(2, 'd', 5);
-    setPawnAtCord(2, 'e', 4);
+    setPawnAtCord(Pawn::WHITE, 'd', 4);
+    setPawnAtCord(Pawn::WHITE, 'e', 5);
+    setPawnAtCord(Pawn::BLACK, 'd', 5);
+    setPawnAtCord(Pawn::BLACK, 'e', 4);
 }
 
 Board::~Board()
@@ -37,7 +30,6 @@ Board::~Board()
     free(board);
 }
 
-void Board::setPawnAtCord(int color, char col, int row) {
-    board[(row-1) * size + col-97]->setCoords(col, row);
-    board[(row-1) * size + col-97]->setColor(color);
+void Board::setPawnAtCord(Pawn color, char col, int row) {
+    board[(row-1) * size + col-97] = color;
 }

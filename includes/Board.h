@@ -1,6 +1,12 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include "Pawn.h"
+
+typedef enum
+{
+    EMPTY = 0,
+    WHITE = 1,
+    BLACK = 2,
+} Pawn;
 
 class Board
 {
@@ -9,11 +15,11 @@ friend std::ostream & operator<<(std::ostream &, const Board &P);
     public: 
     Board();
     ~Board();
-    void setPawnAtCord(int color, char col, int row);
+    void setPawnAtCord(Pawn color, char col, int row);
         
     private:
     int size;
-    Pawn **board;
+    int *board;
 
 };
 
