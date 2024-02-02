@@ -15,7 +15,6 @@ typedef enum: unsigned short
 
 typedef enum: unsigned short
 {
-    NONE = 0,
     TOP = 1,
     RIGHT = 2,
     BOTTOM = 4,
@@ -41,9 +40,14 @@ class Board
     bool isValidCoord(const std::string& coord) const;
     void setCoord(const Pawn& color, const std::string& coord);
     Pawn getCoord(const std::string& coord) const;
-    bool canBePlaced(const std::string& coord) const;
+    bool canBePlaced(const Pawn& pawn, const std::string& coord) const;
     bool place(const Pawn& pawn, const std::string& coord);
-    Direction getValidDirection(const Pawn& pawn, const std::string& coord) const;
+    std::vector<Direction> getValidDirection(const Pawn& pawn, const std::string& coord) const;
+    void switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction);
+    void switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord);
+    void switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord);
+    void switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord);
+    void switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord);
     std::vector<std::string> getValidMove(const Pawn &pawn) const;
 
     private:

@@ -87,6 +87,7 @@ bool Board::isValidCoord(const string &coord) const
  */
 void Board::setCoord(const Pawn &color, const string &coord)
 {
+    cout << "Place " << coord << endl;
     board[((int)(coord[1] - '1')) * size + ((int)coord[0] - 'a')] = color;
 }
 
@@ -103,36 +104,28 @@ Pawn Board::getCoord(const string &coord) const
 
 /**
  * @brief Check if a Pawn can be placed at a given coordinate
+ * Doesn't check if it's a valid move (use getValidDirection for that)
  *
  * @param coord Coord to check
  * @return true If a Pawn can be placed
  * @return false If the coord isn't empty
  */
-bool Board::canBePlaced(const string &coord) const
+bool Board::canBePlaced(const Pawn& pawn, const string &coord) const
 {
     if (!isValidCoord(coord) || getCoord(coord) != Pawn::EMPTY)
     {
         return false;
     }
 
-    /*char tempCol = coord[0];
-    char tempRow = coord[1];*/
-
-    // Top
-    /*for (char i = tempRow - 1; i >= '1'; i--)
-    {
-        //Pawn currPawn = getCoord();
-    }*/
-
     return true;
 }
 
-Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) const
+vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &coord) const
 {
     if (!isValidCoord(coord))
-        return NONE;
+        return {};
 
-    Direction validDirection = NONE;
+    vector<Direction> validDirection = {};
 
     // Top
     for (char row = coord[1] - 1; row >= '1'; row--)
@@ -146,7 +139,7 @@ Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) c
 
         if (currentPawn == pawn && coord[1] - row > 1)
         {
-            validDirection = (Direction)(validDirection | TOP);
+            validDirection.push_back(Direction::TOP);
             break;
         }
         else if (currentPawn == pawn && coord[1] - row <= 1)
@@ -167,7 +160,8 @@ Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) c
 
         if (currentPawn == pawn && row - coord[1] > 1)
         {
-            validDirection = (Direction)(validDirection | BOTTOM);
+            validDirection.push_back(Direction::BOTTOM);
+            break;
         }
         else if (currentPawn == pawn && row - coord[1] <= 1)
         {
@@ -187,7 +181,8 @@ Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) c
 
         if (currentPawn == pawn && coord[0] - col > 1)
         {
-            validDirection = (Direction)(validDirection | LEFT);
+            validDirection.push_back(Direction::LEFT);
+            break;
         }
         else if (currentPawn == pawn && coord[0] - col <= 1)
         {
@@ -207,7 +202,8 @@ Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) c
 
         if (currentPawn == pawn && col - coord[0] > 1)
         {
-            validDirection = (Direction)(validDirection | RIGHT);
+            validDirection.push_back(Direction::RIGHT);
+            break;
         }
         else if (currentPawn == pawn && col - coord[0] <= 1)
         {
@@ -216,6 +212,96 @@ Direction Board::getValidDirection(const Pawn &pawn, const std::string &coord) c
     }
 
     return validDirection;
+}
+
+void Board::switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction)
+{
+    switch (direction)
+    {
+    case TOP:
+        switchPawnsTop(placedPawn, sourceCoord);
+        break;
+    
+    case RIGHT:
+        switchPawnsRight(placedPawn, sourceCoord);
+        break;
+
+    case BOTTOM:
+        switchPawnsBottom(placedPawn, sourceCoord);
+        break;
+
+    case LEFT:
+        switchPawnsLeft(placedPawn, sourceCoord);
+        break;
+    
+    default:
+        break;
+    }
+    
+}
+
+void Board::switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord)
+{
+    for (char row = sourceCoord[1] - 1; row >= '1'; row--)
+    {
+        string currCoord = string(1, sourceCoord[0]) + string(1, row);
+        Pawn currentPawn = getCoord(currCoord);
+
+        if (currentPawn == Pawn::EMPTY || currentPawn == placedPawn)
+        {
+            break;
+        }
+        
+        setCoord(placedPawn, currCoord);
+    }
+}
+
+void Board::switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord)
+{
+    for (char col = sourceCoord[0] + 1; col <= 'h'; col++)
+    {
+        string currCoord = string(1, col) + string(1, sourceCoord[1]);
+        Pawn currentPawn = getCoord(currCoord);
+
+        if (currentPawn == Pawn::EMPTY || currentPawn == placedPawn)
+        {
+            break;
+        }
+        
+        setCoord(placedPawn, currCoord);
+    }
+}
+
+void Board::switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord)
+{
+    for (char row = sourceCoord[1] + 1; row <= '8'; row++)
+    {
+        string currCoord = string(1, sourceCoord[0]) + string(1, row);
+        Pawn currentPawn = getCoord(currCoord);
+
+        if (currentPawn == Pawn::EMPTY || currentPawn == placedPawn)
+        {
+            break;
+        }
+        
+        setCoord(placedPawn, currCoord);
+    }
+}
+
+void Board::switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord)
+{
+    for (char col = sourceCoord[0] - 1; col >= 'a'; col--)
+    {
+        string currCoord = string(1, col) + string(1, sourceCoord[1]);
+        Pawn currentPawn = getCoord(currCoord);
+
+        if (currentPawn == Pawn::EMPTY || currentPawn == placedPawn)
+        {
+            break;
+        }
+
+        setCoord(placedPawn, currCoord);
+    }
 }
 
 vector<string> Board::getValidMove(const Pawn &pawn) const
@@ -227,7 +313,7 @@ vector<string> Board::getValidMove(const Pawn &pawn) const
         for (char c = 'a'; c <= 'h'; c++)
         {
             string currCoord = string(1, c) + string(1, r);
-            if (getValidDirection(pawn, string(1, c) + string(1, r)) != Direction::NONE)
+            if (getValidDirection(pawn, string(1, c) + string(1, r)).size() > 0)
             {
                 validCoords.push_back(currCoord);
             }
@@ -239,9 +325,24 @@ vector<string> Board::getValidMove(const Pawn &pawn) const
 
 bool Board::place(const Pawn &pawn, const std::string &coord)
 {
-    if (!canBePlaced(coord))
+    if (!canBePlaced(pawn, coord))
     {
         return false;
     }
+
+    vector<Direction> moveDirection = getValidDirection(pawn, coord);
+    
+    if (moveDirection.size() == 0)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < (int) moveDirection.size(); i++)
+    {
+        switchPawns(pawn, coord, moveDirection[i]);
+    }
+
+    setCoord(pawn, coord);
+
     return true;
 }
