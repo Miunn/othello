@@ -42,12 +42,17 @@ class Board
     Pawn getCoord(const std::string& coord) const;
     bool canBePlaced(const Pawn& pawn, const std::string& coord) const;
     bool place(const Pawn& pawn, const std::string& coord);
+    bool play(const Pawn& pawn, const std::string& coord);
     std::vector<Direction> getValidDirection(const Pawn& pawn, const std::string& coord) const;
     void switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction);
     void switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord);
     void switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord);
     void switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord);
     void switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord);
+    void switchPawnsDTR(const Pawn  &placedPawn, const std::string& sourceCoord);
+    void switchPawnsDBR(const Pawn  &placedPawn, const std::string& sourceCoord);
+    void switchPawnsDBL(const Pawn  &placedPawn, const std::string& sourceCoord);
+    void switchPawnsDTL(const Pawn  &placedPawn, const std::string& sourceCoord);
     std::vector<std::string> getValidMove(const Pawn &pawn) const;
 
     private:
