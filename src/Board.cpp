@@ -48,10 +48,10 @@ Board::Board()
     size = 8;
     board = (Pawn *)calloc(size * size, sizeof(Pawn));
 
-    /*setCoord(Pawn::WHITE, "d4");
+    setCoord(Pawn::WHITE, "d4");
     setCoord(Pawn::WHITE, "e5");
     setCoord(Pawn::BLACK, "d5");
-    setCoord(Pawn::BLACK, "e4");*/
+    setCoord(Pawn::BLACK, "e4");
 }
 
 /**
