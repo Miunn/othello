@@ -109,7 +109,7 @@ Pawn Board::getCoord(const string &coord) const
  * @return true If a Pawn can be placed
  * @return false If the coord isn't empty
  */
-bool Board::canBePlaced(const Pawn& pawn, const string &coord) const
+bool Board::canBePlaced(const Pawn &pawn, const string &coord) const
 {
     if (!isValidCoord(coord) || getCoord(coord) != Pawn::EMPTY)
     {
@@ -297,14 +297,14 @@ vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &
     return validDirection;
 }
 
-void Board::switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction)
+void Board::switchPawns(const Pawn &placedPawn, const std::string &sourceCoord, Direction direction)
 {
     switch (direction)
     {
     case TOP:
         switchPawnsTop(placedPawn, sourceCoord);
         break;
-    
+
     case RIGHT:
         switchPawnsRight(placedPawn, sourceCoord);
         break;
@@ -316,7 +316,7 @@ void Board::switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, 
     case LEFT:
         switchPawnsLeft(placedPawn, sourceCoord);
         break;
-    
+
     case DTR:
         switchPawnsDTR(placedPawn, sourceCoord);
         break;
@@ -336,10 +336,9 @@ void Board::switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, 
     default:
         break;
     }
-    
 }
 
-void Board::switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsTop(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char row = sourceCoord[1] - 1; row >= '1'; row--)
     {
@@ -350,12 +349,12 @@ void Board::switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoor
         {
             break;
         }
-        
+
         setCoord(placedPawn, currCoord);
     }
 }
 
-void Board::switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsRight(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] + 1; col <= 'h'; col++)
     {
@@ -366,12 +365,12 @@ void Board::switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCo
         {
             break;
         }
-        
+
         setCoord(placedPawn, currCoord);
     }
 }
 
-void Board::switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsBottom(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char row = sourceCoord[1] + 1; row <= '8'; row++)
     {
@@ -382,12 +381,12 @@ void Board::switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceC
         {
             break;
         }
-        
+
         setCoord(placedPawn, currCoord);
     }
 }
 
-void Board::switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsLeft(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] - 1; col >= 'a'; col--)
     {
@@ -403,7 +402,7 @@ void Board::switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoo
     }
 }
 
-void Board::switchPawnsDTR(const Pawn  &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsDTR(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] + 1, row = sourceCoord[1] - 1; col <= 'h' && row >= '1'; col++, row--)
     {
@@ -419,7 +418,7 @@ void Board::switchPawnsDTR(const Pawn  &placedPawn, const std::string& sourceCoo
     }
 }
 
-void Board::switchPawnsDBR(const Pawn  &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsDBR(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] + 1, row = sourceCoord[1] + 1; col <= 'h' && row <= '8'; col++, row++)
     {
@@ -435,7 +434,7 @@ void Board::switchPawnsDBR(const Pawn  &placedPawn, const std::string& sourceCoo
     }
 }
 
-void Board::switchPawnsDBL(const Pawn  &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsDBL(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] - 1, row = sourceCoord[1] + 1; col >= 'a' && row <= '8'; col--, row++)
     {
@@ -451,7 +450,7 @@ void Board::switchPawnsDBL(const Pawn  &placedPawn, const std::string& sourceCoo
     }
 }
 
-void Board::switchPawnsDTL(const Pawn  &placedPawn, const std::string& sourceCoord)
+void Board::switchPawnsDTL(const Pawn &placedPawn, const std::string &sourceCoord)
 {
     for (char col = sourceCoord[0] - 1, row = sourceCoord[1] - 1; col >= 'a' && row >= '1'; col--, row--)
     {
@@ -498,16 +497,28 @@ bool Board::place(const Pawn &pawn, const std::string &coord)
     return true;
 }
 
-bool Board::play(const Pawn &pawn, const std::string& coord)
+bool Board::gameFinished(const Pawn &pawn)
 {
-    if (!isValidCoord(coord)) return false;
+    return getValidMove(pawn).size() == 0;
+}
+
+bool Board::play(const Pawn &pawn, const std::string &coord)
+{
+    if (!isValidCoord(coord))
+        return false;
 
     vector<Direction> moveDirection = getValidDirection(pawn, coord);
-    
-    if (moveDirection.size() == 0) return false;    // Illegal move
-    if (!place(pawn, coord)) return false;
-    
-    for (int i = 0; i < (int) moveDirection.size(); i++)
+
+    if (moveDirection.size() == 0)
+        return false; // Illegal move
+
+    if (gameFinished(pawn))
+        return false; // Game is finished
+
+    if (!place(pawn, coord))
+        return false;
+
+    for (int i = 0; i < (int)moveDirection.size(); i++)
     {
         switchPawns(pawn, coord, moveDirection[i]);
     }

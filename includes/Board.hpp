@@ -4,16 +4,16 @@
 
 /**
  * @brief Represent a Pawn in a Board
- * 
+ *
  */
-typedef enum: unsigned short
+typedef enum : unsigned short
 {
     EMPTY = 0,
     WHITE = 1,
     BLACK = 2,
 } Pawn;
 
-typedef enum: unsigned short
+typedef enum : unsigned short
 {
     TOP = 1,
     RIGHT = 2,
@@ -27,38 +27,38 @@ typedef enum: unsigned short
 
 /**
  * @brief Othello board game
- * 
+ *
  */
 class Board
 {
     // Surcharge the operator '<<'
-    friend std::ostream & operator<<(std::ostream &, const Board &P); 
+    friend std::ostream &operator<<(std::ostream &, const Board &P);
 
-    public: 
+public:
     Board();
     ~Board();
-    bool isValidCoord(const std::string& coord) const;
-    void setCoord(const Pawn& color, const std::string& coord);
-    Pawn getCoord(const std::string& coord) const;
-    bool canBePlaced(const Pawn& pawn, const std::string& coord) const;
-    bool place(const Pawn& pawn, const std::string& coord);
-    bool play(const Pawn& pawn, const std::string& coord);
-    std::vector<Direction> getValidDirection(const Pawn& pawn, const std::string& coord) const;
-    void switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction);
-    void switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDTR(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDBR(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDBL(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDTL(const Pawn  &placedPawn, const std::string& sourceCoord);
+    bool isValidCoord(const std::string &coord) const;
+    void setCoord(const Pawn &color, const std::string &coord);
+    Pawn getCoord(const std::string &coord) const;
+    bool canBePlaced(const Pawn &pawn, const std::string &coord) const;
+    bool place(const Pawn &pawn, const std::string &coord);
+    bool gameFinished(const Pawn &pawn);
+    bool play(const Pawn &pawn, const std::string &coord);
+    std::vector<Direction> getValidDirection(const Pawn &pawn, const std::string &coord) const;
+    void switchPawns(const Pawn &placedPawn, const std::string &sourceCoord, Direction direction);
+    void switchPawnsTop(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsRight(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsBottom(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsLeft(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsDTR(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsDBR(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsDBL(const Pawn &placedPawn, const std::string &sourceCoord);
+    void switchPawnsDTL(const Pawn &placedPawn, const std::string &sourceCoord);
     std::vector<std::string> getValidMove(const Pawn &pawn) const;
 
-    private:
+private:
     int size;
     Pawn *board;
-
 };
 
 #endif
