@@ -141,7 +141,7 @@ vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &
             validDirection.push_back(Direction::TOP);
             break;
         }
-        else if (currentPawn == pawn && coord[1] - row <= 1)
+        else if (currentPawn == pawn)
         {
             break;
         }
@@ -162,7 +162,7 @@ vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &
             validDirection.push_back(Direction::BOTTOM);
             break;
         }
-        else if (currentPawn == pawn && row - coord[1] <= 1)
+        else if (currentPawn == pawn)
         {
             break;
         }
@@ -183,7 +183,7 @@ vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &
             validDirection.push_back(Direction::LEFT);
             break;
         }
-        else if (currentPawn == pawn && coord[0] - col <= 1)
+        else if (currentPawn == pawn)
         {
             break;
         }
@@ -204,7 +204,7 @@ vector<Direction> Board::getValidDirection(const Pawn &pawn, const std::string &
             validDirection.push_back(Direction::RIGHT);
             break;
         }
-        else if (currentPawn == pawn && col - coord[0] <= 1)
+        else if (currentPawn == pawn)
         {
             break;
         }

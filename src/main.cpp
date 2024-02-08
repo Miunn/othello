@@ -11,19 +11,17 @@ int main(int argc, char *argv[]) {
 
     cout << b << endl;
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-    vector<string> moves = b.getValidMove(Pawn::BLACK);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-
-    for (int i = 0; i < (int)moves.size(); i++) {
-        cout << moves[i] << " ";
+    int all_durations = 0;
+    for (int i = 0; i < 1000; i++) {
+        auto t1 = std::chrono::high_resolution_clock::now();
+        vector<string> moves = b.getValidMove(Pawn::BLACK);
+        auto t2 = std::chrono::high_resolution_clock::now();
+        all_durations += std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     }
-    cout << endl;
 
-    cout << "Exec time: " << duration.count() << " microseconds" << endl;
+    cout << "Average exec time: " << all_durations / 1000 << " microseconds" << endl;
 
-    vector<string> history = {};
+    /*vector<string> history = {};
     Pawn currentPlayer = Pawn::BLACK;
     for (vector<string> moves = b.getValidMove(currentPlayer); (int)moves.size() > 0; moves = b.getValidMove(currentPlayer)) {
         cout << b << endl;
@@ -49,7 +47,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < (int)history.size(); i++) {
         cout << history[i] << " ";
     }
-    cout << endl;
+    cout << endl;*/
 
     return 0;
 }
