@@ -37,22 +37,22 @@ class Board
     public: 
     Board();
     ~Board();
-    bool isValidCoord(const std::string& coord) const;
-    void setCoord(const Pawn& color, const std::string& coord);
-    Pawn getCoord(const std::string& coord) const;
-    bool canBePlaced(const Pawn& pawn, const std::string& coord) const;
-    bool place(const Pawn& pawn, const std::string& coord);
+    bool isValidCoord(const int& coord) const;
+    void setCoord(const Pawn& color, const int& coord);
+    Pawn getCoord(const int& coord) const;
+    bool canBePlaced(const Pawn& pawn, const int& coord) const;
+    bool place(const Pawn& pawn, const int& coord);
     bool play(const Pawn& pawn, const std::string& coord);
-    Direction getValidDirection(const Pawn& pawn, const std::string& coord) const;
-    void switchPawns(const Pawn& placedPawn, const std::string& sourceCoord, Direction direction);
-    void switchPawnsTop(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsRight(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsBottom(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsLeft(const Pawn &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDTR(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDBR(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDBL(const Pawn  &placedPawn, const std::string& sourceCoord);
-    void switchPawnsDTL(const Pawn  &placedPawn, const std::string& sourceCoord);
+    Direction getValidDirection(const Pawn& pawn, const int& coord) const;
+    void switchPawns(const Pawn& placedPawn, const int& sourceCoord, Direction direction);
+    void switchPawnsTop(const Pawn &placedPawn, const int& sourceCoord);
+    void switchPawnsRight(const Pawn &placedPawn, const int& sourceCoord);
+    void switchPawnsBottom(const Pawn &placedPawn, const int& sourceCoord);
+    void switchPawnsLeft(const Pawn &placedPawn, const int& sourceCoord);
+    void switchPawnsDTR(const Pawn  &placedPawn, const int& sourceCoord);
+    void switchPawnsDBR(const Pawn  &placedPawn, const int& sourceCoord);
+    void switchPawnsDBL(const Pawn  &placedPawn, const int& sourceCoord);
+    void switchPawnsDTL(const Pawn  &placedPawn, const int& sourceCoord);
     bool* getValidMove(const Pawn &pawn) const;
 
     int coordToIndex(const std::string& coord) const;
