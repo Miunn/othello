@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     int all_durations = 0;
     for (int i = 0; i < 1000; i++) {
         auto t1 = std::chrono::high_resolution_clock::now();
-        vector<string> moves = b.getValidMove(Pawn::BLACK);
+        bool* moves = b.getValidMove(Pawn::BLACK);
         auto t2 = std::chrono::high_resolution_clock::now();
         all_durations += std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     }
