@@ -479,6 +479,11 @@ bool Board::place(const Pawn &pawn, const int &coord)
     return true;
 }
 
+bool Board::isGameFinished() const
+{
+    return getValidMove(Pawn::BLACK) == 0 && getValidMove(Pawn::WHITE);
+}
+
 bool Board::play(const Pawn &pawn, const std::string &coord)
 {
     int indexCoord = coordToIndex(coord);
@@ -490,9 +495,14 @@ bool Board::play(const Pawn &pawn, const std::string &coord)
 
     if (moveDirection == 0)
         return false; // Illegal move
+
+    if (isGameFinished())
+        return false; // Game is finished
+
     if (!place(pawn, indexCoord))
         return false;
 
     switchPawns(pawn, indexCoord, moveDirection);
+
     return true;
 }

@@ -4,16 +4,16 @@
 
 /**
  * @brief Represent a Pawn in a Board
- * 
+ *
  */
-typedef enum: unsigned short
+typedef enum : unsigned short
 {
     EMPTY = 0,
     WHITE = 1,
     BLACK = 2,
 } Pawn;
 
-typedef enum: unsigned short
+typedef enum : unsigned short
 {
     TOP = 1,
     RIGHT = 2,
@@ -27,14 +27,14 @@ typedef enum: unsigned short
 
 /**
  * @brief Othello board game
- * 
+ *
  */
 class Board
 {
     // Surcharge the operator '<<'
-    friend std::ostream & operator<<(std::ostream &, const Board &P); 
+    friend std::ostream &operator<<(std::ostream &, const Board &P);
 
-    public: 
+public:
     Board();
     ~Board();
     bool isValidCoord(const int& coord) const;
@@ -58,10 +58,11 @@ class Board
     int coordToIndex(const std::string& coord) const;
     std::string indexToCoord(const int& index) const;
 
-    private:
+    bool isGameFinished() const;
+
+private:
     int size;
     Pawn *board;
-
 };
 
 #endif
