@@ -15,12 +15,12 @@ int main(int argc, char *argv[])
     int all_durations = 0;
     for (int i = 0; i < 1000; i++) {
         auto t1 = std::chrono::high_resolution_clock::now();
-        bool* moves = b.getValidMove(Pawn::BLACK);
+        b.getValidMove(Pawn::BLACK);
         auto t2 = std::chrono::high_resolution_clock::now();
         all_durations += std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     }
 
-    cout << "Average exec time: " << all_durations / 1000 << " microseconds" << endl;
+    cout << "Find valid moves average exec time: " << all_durations / 1000 << " microseconds" << endl;
 
     /*vector<string> history = {};
     Pawn currentPlayer = Pawn::BLACK;

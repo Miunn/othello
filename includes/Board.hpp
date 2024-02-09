@@ -15,6 +15,7 @@ typedef enum : unsigned short
 
 typedef enum : unsigned short
 {
+    NONE = 0,
     TOP = 1,
     RIGHT = 2,
     BOTTOM = 4,

@@ -139,9 +139,9 @@ bool Board::canBePlaced(const Pawn &pawn, const int &coord) const
 Direction Board::getValidDirection(const Pawn &pawn, const int &coord) const
 {
     if (!isValidCoord(coord))
-        return (Direction)0;
+        return Direction::NONE;
 
-    Direction validDirection = (Direction)0;
+    Direction validDirection = Direction::NONE;
 
     // Top
     for (int row = coord - 8; row >= 0; row -= size)
