@@ -186,7 +186,7 @@ Direction Board::getValidDirection(const Pawn &pawn, const int &coord) const
     }
 
     // Left
-    for (int col = coord - 1; col > coord - coord % 8; col--)
+    for (int col = coord - 1; col >= coord - coord % 8; col--)
     {
         Pawn currentPawn = getCoord(col);
 
@@ -270,7 +270,7 @@ Direction Board::getValidDirection(const Pawn &pawn, const int &coord) const
     }
 
     // Diagonal BOTTOM LEFT
-    for (int diag = coord + 7; diag < coord - (coord % 8) + coord % 8 * 8 && diag < 64; diag += 7)
+    for (int diag = coord + 7; diag <= coord - (coord % 8) + coord % 8 * 8 && diag < 64; diag += 7)
     {
         Pawn currentPawn = getCoord(diag);
 
@@ -381,7 +381,7 @@ void Board::switchPawnsBottom(const Pawn &placedPawn, const int &sourceCoord)
 
 void Board::switchPawnsLeft(const Pawn &placedPawn, const int &sourceCoord)
 {
-    for (int col = sourceCoord - 1; col > sourceCoord - sourceCoord % 8; col--)
+    for (int col = sourceCoord - 1; col >= sourceCoord - sourceCoord % 8; col--)
     {
         Pawn currentPawn = getCoord(col);
 
@@ -426,7 +426,7 @@ void Board::switchPawnsDBR(const Pawn &placedPawn, const int &sourceCoord)
 
 void Board::switchPawnsDBL(const Pawn &placedPawn, const int &sourceCoord)
 {
-    for (int diag = sourceCoord + 7; diag < sourceCoord - (sourceCoord % 8) + sourceCoord % 8 * 8 && diag < 64; diag += 7)
+    for (int diag = sourceCoord + 7; diag <= sourceCoord - (sourceCoord % 8) + sourceCoord % 8 * 8 && diag < 64; diag += 7)
     {
         Pawn currentPawn = getCoord(diag);
 

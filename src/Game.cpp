@@ -11,12 +11,17 @@ Game::Game()
     this->runningGame = false;
 }
 
-Game::~Game()
+Game::Game(Board *b, Pawn player)
 {
-    delete b;
+    this->b = b;
+    this->currentPlayer = player;
 }
 
-Board* Game::getBoard() const
+Game::~Game()
+{
+}
+
+Board *Game::getBoard() const
 {
     return this->b;
 }
@@ -26,28 +31,29 @@ Pawn Game::getCurrentPlayer() const
     return this->currentPlayer;
 }
 
-void Game::togglePlayer()
+std::vector<std::string> Game::togglePlayer()
 {
     // Change the player
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
-
-    if (b->getValidMoves(currentPlayer).size() != 0)
+    std::vector<std::string> moves = b->getValidMoves(currentPlayer);
+    if (moves.size() != 0)
     {
-        return; // No problem
+        return moves; // No problem
     }
 
     // No moves for next player
     // Skip his turn
+    std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
-
-    if (b->getValidMoves(currentPlayer).size() != 0)
+    moves = b->getValidMoves(currentPlayer);
+    if (moves.size() != 0)
     {
-        return; // No problem
+        return moves; // No problem
     }
 
     // Game finished
     this->runningGame = false;
-
+    return {};
 }
 
 std::string Game::readAndPlayFromSTDin()
@@ -62,17 +68,44 @@ std::string Game::readAndPlayFromSTDin()
         togglePlayer();
         return coord;
     }
+    std::cout << "Played false" << std::endl;
     return "";
 }
 
 void Game::startGame()
 {
-    std::string playedCoord;
+    std::string playedCoord = "aa";
     this->runningGame = true;
+
+    if (b->isGameFinished())
+    {
+        std::cout << "Game already ended" << std::endl;
+        std::cout << *b << std::endl;
+        return;
+    }
+
+    std::vector<std::string> moves = {};
+
+    std::cout << *b << std::endl;
     do
     {
-        std::cout << *b << std::endl;
-        b->printValidMoves(b->getValidMoves(currentPlayer));
+        moves = b->getValidMoves(currentPlayer);
+
+        if (moves.size() == 0)
+        {
+            std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
+            if (togglePlayer().size() == 0)
+            {
+                break;
+            }
+
+            moves = b->getValidMoves(currentPlayer);
+        }
+
+        b->printValidMoves(moves);
         playedCoord = readAndPlayFromSTDin();
+        std::cout << *b << std::endl;
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
+    std::cout << "Game ended" << std::endl;
+    std::cout << *b << std::endl;
 }

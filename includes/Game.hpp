@@ -7,11 +7,12 @@ class Game
 {
     public:
     Game();
+    Game(Board *b, Pawn player);
     ~Game();
 
     Board* getBoard() const;
     Pawn getCurrentPlayer() const;
-    void togglePlayer();
+    std::vector<std::string> togglePlayer();
     std::string readAndPlayFromSTDin();
     void startGame();
 
