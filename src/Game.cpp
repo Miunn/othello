@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include "../includes/Board.hpp"
 #include "../includes/Game.hpp"
@@ -26,4 +27,15 @@ Pawn Game::getCurrentPlayer() const
 void Game::togglePlayer()
 {
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
+}
+
+void Game::readAndPlayFromSTDin()
+{
+    std::string coord;
+
+    std::cout << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << " > ";
+    std::cin >> coord;
+
+    this->b->play(currentPlayer, coord);
+    togglePlayer();
 }

@@ -23,6 +23,10 @@ int main(int argc, char *argv[])
 
     cout << "Find valid moves average exec time: " << all_durations / 100'000.0f << " microseconds" << endl;
     
+    game.readAndPlayFromSTDin();
+
+    cout << *game.getBoard() << endl;
+
     /*vector<string> history = {};
     Pawn currentPlayer = Pawn::BLACK;
     for (vector<string> moves = b.getValidMove(currentPlayer); (int)moves.size() > 0; moves = b.getValidMove(currentPlayer)) {

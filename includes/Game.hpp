@@ -11,6 +11,7 @@ class Game
     Board* getBoard() const;
     Pawn getCurrentPlayer() const;
     void togglePlayer();
+    void readAndPlayFromSTDin();
 
     private:
     Pawn currentPlayer;
