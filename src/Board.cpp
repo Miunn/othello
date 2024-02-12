@@ -186,7 +186,7 @@ Direction Board::getValidDirection(const Pawn &pawn, const int &coord) const
     }
 
     // Left
-    for (int col = coord - 1; col > coord - coord % 8; col--)
+    for (int col = coord - 1; col >= coord - coord % 8; col--)
     {
         Pawn currentPawn = getCoord(col);
 
@@ -270,7 +270,7 @@ Direction Board::getValidDirection(const Pawn &pawn, const int &coord) const
     }
 
     // Diagonal BOTTOM LEFT
-    for (int diag = coord + 7; diag < coord - (coord % 8) + coord % 8 * 8 && diag < 64; diag += 7)
+    for (int diag = coord + 7; diag <= coord - (coord % 8) + coord % 8 * 8 && diag < 64; diag += 7)
     {
         Pawn currentPawn = getCoord(diag);
 
@@ -381,7 +381,7 @@ void Board::switchPawnsBottom(const Pawn &placedPawn, const int &sourceCoord)
 
 void Board::switchPawnsLeft(const Pawn &placedPawn, const int &sourceCoord)
 {
-    for (int col = sourceCoord - 1; col > sourceCoord - sourceCoord % 8; col--)
+    for (int col = sourceCoord - 1; col >= sourceCoord - sourceCoord % 8; col--)
     {
         Pawn currentPawn = getCoord(col);
 
@@ -426,7 +426,7 @@ void Board::switchPawnsDBR(const Pawn &placedPawn, const int &sourceCoord)
 
 void Board::switchPawnsDBL(const Pawn &placedPawn, const int &sourceCoord)
 {
-    for (int diag = sourceCoord + 7; diag < sourceCoord - (sourceCoord % 8) + sourceCoord % 8 * 8 && diag < 64; diag += 7)
+    for (int diag = sourceCoord + 7; diag <= sourceCoord - (sourceCoord % 8) + sourceCoord % 8 * 8 && diag < 64; diag += 7)
     {
         Pawn currentPawn = getCoord(diag);
 
@@ -454,29 +454,26 @@ void Board::switchPawnsDTL(const Pawn &placedPawn, const int &sourceCoord)
     }
 }
 
-bool *Board::getValidMove(const Pawn &pawn) const
+vector<string> Board::getValidMoves(const Pawn &pawn) const
 {
-    bool *validCoords = (bool *)calloc(64, sizeof(bool));
+    vector<string> moves = {};
 
     for (int coord = 0; coord < 64; coord++)
     {
         if (canBePlaced(pawn, coord) && getValidDirection(pawn, coord) != 0)
         {
-            validCoords[coord] = true;
+            moves.push_back(indexToCoord(coord));
         }
     }
 
-    return validCoords;
+    return moves;
 }
 
-void Board::printValidMoves(bool* moves) const
+void Board::printValidMoves(vector<string> moves) const
 {
-    for (int i = 0; i < size*size; i++)
+    for (int i = 0; i < (int) moves.size(); i++)
     {
-        if (moves[i])
-        {
-            cout << (char)('a' + i%8) << (char)('1' + i/8) << " ";
-        }
+        cout << moves[i] << " ";
     }
     cout << endl;
 }
@@ -493,7 +490,7 @@ bool Board::place(const Pawn &pawn, const int &coord)
 
 bool Board::isGameFinished() const
 {
-    return getValidMove(Pawn::BLACK) == 0 && getValidMove(Pawn::WHITE);
+    return getValidMoves(Pawn::BLACK).size() == 0 && getValidMoves(Pawn::WHITE).size() == 0;
 }
 
 bool Board::play(const Pawn &pawn, const std::string &coord)
