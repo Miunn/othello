@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../includes/Board.hpp"
+#include "../includes/Game.hpp"
 
 #include <chrono>
 
@@ -8,20 +9,20 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
-    Board b;
+    Game game;
 
-    cout << b << endl;
-
+    cout << *game.getBoard() << endl;
+    
     int all_durations = 0;
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100'000; i++) {
         auto t1 = std::chrono::high_resolution_clock::now();
-        b.getValidMove(Pawn::BLACK);
+        (*game.getBoard()).getValidMove(Pawn::BLACK);
         auto t2 = std::chrono::high_resolution_clock::now();
         all_durations += std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     }
 
-    cout << "Find valid moves average exec time: " << all_durations / 1000 << " microseconds" << endl;
-
+    cout << "Find valid moves average exec time: " << all_durations / 100'000.0f << " microseconds" << endl;
+    
     /*vector<string> history = {};
     Pawn currentPlayer = Pawn::BLACK;
     for (vector<string> moves = b.getValidMove(currentPlayer); (int)moves.size() > 0; moves = b.getValidMove(currentPlayer)) {
