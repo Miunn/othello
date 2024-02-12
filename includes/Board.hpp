@@ -55,6 +55,7 @@ public:
     void switchPawnsDBL(const Pawn  &placedPawn, const int& sourceCoord);
     void switchPawnsDTL(const Pawn  &placedPawn, const int& sourceCoord);
     bool* getValidMove(const Pawn &pawn) const;
+    void printValidMoves(bool* moves) const;
 
     int coordToIndex(const std::string& coord) const;
     std::string indexToCoord(const int& index) const;

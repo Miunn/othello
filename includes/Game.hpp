@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+#include <iostream>
 #include "../includes/Board.hpp"
 
 class Game
@@ -11,7 +12,8 @@ class Game
     Board* getBoard() const;
     Pawn getCurrentPlayer() const;
     void togglePlayer();
-    void readAndPlayFromSTDin();
+    std::string readAndPlayFromSTDin();
+    void startGame();
 
     private:
     Pawn currentPlayer;

@@ -469,6 +469,18 @@ bool *Board::getValidMove(const Pawn &pawn) const
     return validCoords;
 }
 
+void Board::printValidMoves(bool* moves) const
+{
+    for (int i = 0; i < size*size; i++)
+    {
+        if (moves[i])
+        {
+            cout << (char)('a' + i%8) << (char)('1' + i/8) << " ";
+        }
+    }
+    cout << endl;
+}
+
 bool Board::place(const Pawn &pawn, const int &coord)
 {
     if (!canBePlaced(pawn, coord))

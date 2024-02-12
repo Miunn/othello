@@ -29,13 +29,29 @@ void Game::togglePlayer()
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
 }
 
-void Game::readAndPlayFromSTDin()
+std::string Game::readAndPlayFromSTDin()
 {
     std::string coord;
 
     std::cout << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << " > ";
     std::cin >> coord;
 
-    this->b->play(currentPlayer, coord);
-    togglePlayer();
+    if (this->b->play(currentPlayer, coord))
+    {
+        togglePlayer();
+        return coord;
+    }
+    return "";
+}
+
+void Game::startGame()
+{
+    std::string playedCoord = "aa";
+    while (!b->isGameFinished() && playedCoord != "")
+    {
+        std::cout << *b << std::endl;
+        b->printValidMoves(b->getValidMove(currentPlayer));
+        playedCoord = readAndPlayFromSTDin();
+        std::cout << "Played: " << playedCoord << std::endl;
+    }
 }
