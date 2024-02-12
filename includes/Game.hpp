@@ -18,6 +18,7 @@ class Game
     private:
     Pawn currentPlayer;
     Board *b;
+    bool runningGame;
 };
 
 #endif

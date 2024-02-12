@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../includes/Board.hpp"
 #include "../includes/Game.hpp"
 
@@ -7,6 +8,7 @@ Game::Game()
 {
     this->b = new Board;
     this->currentPlayer = Pawn::BLACK;
+    this->runningGame = false;
 }
 
 Game::~Game()
@@ -26,7 +28,26 @@ Pawn Game::getCurrentPlayer() const
 
 void Game::togglePlayer()
 {
+    // Change the player
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
+
+    if (b->getValidMoves(currentPlayer).size() != 0)
+    {
+        return; // No problem
+    }
+
+    // No moves for next player
+    // Skip his turn
+    this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
+
+    if (b->getValidMoves(currentPlayer).size() != 0)
+    {
+        return; // No problem
+    }
+
+    // Game finished
+    this->runningGame = false;
+
 }
 
 std::string Game::readAndPlayFromSTDin()
@@ -47,11 +68,11 @@ std::string Game::readAndPlayFromSTDin()
 void Game::startGame()
 {
     std::string playedCoord;
+    this->runningGame = true;
     do
     {
         std::cout << *b << std::endl;
-        b->printValidMoves(b->getValidMove(currentPlayer));
+        b->printValidMoves(b->getValidMoves(currentPlayer));
         playedCoord = readAndPlayFromSTDin();
-        std::cout << "Played: " << playedCoord << std::endl;
-    } while (!b->isGameFinished() && playedCoord != "");
+    } while (runningGame && !b->isGameFinished() && playedCoord != "");
 }
