@@ -47,11 +47,11 @@ std::string Game::readAndPlayFromSTDin()
 void Game::startGame()
 {
     std::string playedCoord = "aa";
-    while (!b->isGameFinished() && playedCoord != "")
+    do
     {
         std::cout << *b << std::endl;
         b->printValidMoves(b->getValidMove(currentPlayer));
         playedCoord = readAndPlayFromSTDin();
         std::cout << "Played: " << playedCoord << std::endl;
-    }
+    } while (!b->isGameFinished() && playedCoord != "");
 }
