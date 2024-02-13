@@ -14,3 +14,8 @@ void AInterface::showScores() const
         std::cout << std::setw(4) << scores[i] << " ";
     }
 }
+
+Pawn AInterface::getPlayer() const
+{
+    return this->player;
+}

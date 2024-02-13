@@ -1,13 +1,13 @@
-#ifndef MINMAX_H
-#define MINMAX_H
+#ifndef PLAYER_H
+#define PLAYER_H
 #include <iostream>
 #include "AInterface.hpp"
 
-class MinMax: public AInterface
+class Player : public AInterface
 {
     public:
-    MinMax();
-    MinMax(Pawn player);
+    Player();
+    Player(Pawn player);
     std::string play(const Board& board) const override;
 };
 

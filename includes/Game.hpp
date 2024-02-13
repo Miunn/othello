@@ -2,6 +2,7 @@
 #define GAME_H
 #include <iostream>
 #include "../includes/Board.hpp"
+#include "../includes/AInterface.hpp"
 
 /**
  * @brief Othello Game class
@@ -64,7 +65,7 @@ class Game
      * @brief Start a new othello game
      * 
      */
-    void startGame();
+    void startGame(const AInterface& interface1, const AInterface& interface2);
 
     private:
 

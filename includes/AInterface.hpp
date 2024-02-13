@@ -19,6 +19,13 @@ class AInterface
     virtual std::string play(const Board& board) const = 0;
 
     /**
+     * @brief Get the player for the interface
+     * 
+     * @return Pawn 
+     */
+    Pawn getPlayer() const;
+
+    /**
      * @brief Display associated pay off matrix
      * 
      */

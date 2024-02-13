@@ -3,6 +3,7 @@
 #include <vector>
 #include "../includes/Board.hpp"
 #include "../includes/Game.hpp"
+#include "../includes/AInterface.hpp"
 
 Game::Game()
 {
@@ -72,7 +73,7 @@ std::string Game::readAndPlayFromSTDin()
     return "";
 }
 
-void Game::startGame()
+void Game::startGame(const AInterface& blackPlayer, const AInterface& whitePlayer)
 {
     std::string playedCoord = "aa";
     this->runningGame = true;
@@ -81,6 +82,12 @@ void Game::startGame()
     {
         std::cout << "Game already ended" << std::endl;
         std::cout << *b << std::endl;
+        return;
+    }
+
+    if (blackPlayer.getPlayer() == whitePlayer.getPlayer() || blackPlayer.getPlayer() != Pawn::BLACK || whitePlayer.getPlayer() != Pawn::WHITE)
+    {
+        std::cout << "Invalid player setup" << std::endl;
         return;
     }
 
@@ -99,11 +106,31 @@ void Game::startGame()
                 break;
             }
 
+
+
             moves = b->getValidMoves(currentPlayer);
         }
 
-        b->printValidMoves(moves);
-        playedCoord = readAndPlayFromSTDin();
+        if (this->currentPlayer == Pawn::BLACK)
+        {
+            playedCoord = blackPlayer.play(*this->b);
+        }
+        else
+        {
+            playedCoord = whitePlayer.play(*this->b);
+        }
+
+        if (playedCoord.compare("") == 0)
+        {
+            this->runningGame = false;
+            break;
+        }
+
+        if (this->b->play(currentPlayer, playedCoord))
+        {
+            togglePlayer();
+        }
+
         std::cout << *b << std::endl;
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
     std::cout << "Game ended" << std::endl;
