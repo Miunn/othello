@@ -146,20 +146,21 @@ void Game::analyseGame(bool displayGrid) const
         return;
     }
 
+    std::cout << "+-----------------------+" << std::endl;
+    std::cout << "| Résultat: ";
     if (this->b->getBlackScore() > this->b->getWhiteScore())
     {
-        std::cout << "Victoire des noirs" << std::endl;
+        std::cout << std::setw(14) << "Noirs |" << std::endl;
     }
     else if (this->b->getWhiteScore())
     {
-        std::cout << "Victoire des blancs" << std::endl;
+        std::cout << std::setw(14) << "Blancs |" << std::endl;
     }
     else
     {
-        std::cout << "Egalité" << std::endl;
+        std::cout << std::setw(14) << "Egalité |" << std::endl;
     }
-
-    std::cout << "+-----------------------+" << std::endl;
+    std::cout << "|-----------------------|" << std::endl;
     std::cout << "| Vide | Noirs | Blancs |" << std::endl;
     std::cout << "|-----------------------|" << std::endl;
     std::cout << "|" << std::setw(5) << (this->b->getSize()*this->b->getSize() - this->b->getBlackScore() - this->b->getWhiteScore()) << " |" << std::setw(6) << this->b->getBlackScore() << " |" << std::setw(7) << this->b->getWhiteScore() << " |" << std::endl;
@@ -167,6 +168,6 @@ void Game::analyseGame(bool displayGrid) const
 
     if (displayGrid)
     {
-        std::cout << this->b << std::endl;
+        std::cout << "\nGrille de jeu:\n" << *this->b << std::endl;
     }
 }
