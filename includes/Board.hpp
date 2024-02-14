@@ -211,6 +211,13 @@ public:
     void switchPawnsDTL(const Pawn  &placedPawn, const int& sourceCoord);
 
     /**
+     * @brief Increase score for the given pawn and decrease the other one 
+     * 
+     * @param pawn 
+     */
+    void updateScore(const Pawn &pawn);
+
+    /**
      * @brief Get the all valid moves for a Pawn
      * 
      * @param pawn Pawn to compute moves

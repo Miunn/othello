@@ -150,15 +150,15 @@ void Game::analyseGame(bool displayGrid) const
     std::cout << "| Résultat: ";
     if (this->b->getBlackScore() > this->b->getWhiteScore())
     {
-        std::cout << std::setw(14) << "Noirs |" << std::endl;
+        std::cout << std::setw(13) << "Noirs |" << std::endl;
     }
     else if (this->b->getWhiteScore())
     {
-        std::cout << std::setw(14) << "Blancs |" << std::endl;
+        std::cout << std::setw(13) << "Blancs |" << std::endl;
     }
     else
     {
-        std::cout << std::setw(14) << "Egalité |" << std::endl;
+        std::cout << std::setw(13) << "Egalité |" << std::endl;
     }
     std::cout << "|-----------------------|" << std::endl;
     std::cout << "| Vide | Noirs | Blancs |" << std::endl;

@@ -64,6 +64,9 @@ Board::Board()
     setCoord(Pawn::WHITE, coordToIndex("e5"));
     setCoord(Pawn::BLACK, coordToIndex("d5"));
     setCoord(Pawn::BLACK, coordToIndex("e4"));
+
+    blackScore = 2;
+    whiteScore = 2;
 }
 
 /**
@@ -361,6 +364,7 @@ void Board::switchPawnsTop(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, row);
+        updateScore(placedPawn);
     }
 }
 
@@ -376,6 +380,7 @@ void Board::switchPawnsRight(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, col);
+        updateScore(placedPawn);
     }
 }
 
@@ -391,6 +396,7 @@ void Board::switchPawnsBottom(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, row);
+        updateScore(placedPawn);
     }
 }
 
@@ -406,6 +412,7 @@ void Board::switchPawnsLeft(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, col);
+        updateScore(placedPawn);
     }
 }
 
@@ -421,6 +428,7 @@ void Board::switchPawnsDTR(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, diag);
+        updateScore(placedPawn);
     }
 }
 
@@ -436,6 +444,7 @@ void Board::switchPawnsDBR(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, diag);
+        updateScore(placedPawn);
     }
 }
 
@@ -451,6 +460,7 @@ void Board::switchPawnsDBL(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, diag);
+        updateScore(placedPawn);
     }
 }
 
@@ -466,6 +476,21 @@ void Board::switchPawnsDTL(const Pawn &placedPawn, const int &sourceCoord)
         }
 
         setCoord(placedPawn, diag);
+        updateScore(placedPawn);
+    }
+}
+
+void Board::updateScore(const Pawn &pawn)
+{
+    if (pawn == Pawn::BLACK)
+    {
+        this->blackScore++;
+        this->whiteScore--;
+    }
+    else if (pawn == Pawn::WHITE)
+    {
+        this->whiteScore++;
+        this->blackScore--;
     }
 }
 
@@ -499,6 +524,15 @@ bool Board::place(const Pawn &pawn, const int &coord)
         return false;
 
     setCoord(pawn, coord);
+    
+    if (pawn == Pawn::BLACK)
+    {
+        blackScore++;
+    }
+    else if (pawn == Pawn::WHITE)
+    {
+        whiteScore++;
+    }
 
     return true;
 }
