@@ -74,7 +74,7 @@ std::string Game::readAndPlayFromSTDin()
     return "";
 }
 
-void Game::startGame(const AInterface& blackPlayer, const AInterface& whitePlayer)
+void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlayer)
 {
     std::string playedCoord = "aa";
     this->runningGame = true;
@@ -92,26 +92,23 @@ void Game::startGame(const AInterface& blackPlayer, const AInterface& whitePlaye
         return;
     }
 
-    std::vector<std::string> moves = {};
+    std::vector<std::string> moves = b->getValidMoves(currentPlayer);
+    
+    // Skip player on first turn if no move
+    if (moves.size() == 0)
+    {
+        std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
+        if (togglePlayer().size() == 0)
+        {
+            return;
+        }
+
+        moves = b->getValidMoves(currentPlayer);
+    }
 
     std::cout << *b << std::endl;
     do
     {
-        moves = b->getValidMoves(currentPlayer);
-
-        if (moves.size() == 0)
-        {
-            std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
-            if (togglePlayer().size() == 0)
-            {
-                break;
-            }
-
-
-
-            moves = b->getValidMoves(currentPlayer);
-        }
-
         if (this->currentPlayer == Pawn::BLACK)
         {
             playedCoord = blackPlayer.play(*this->b);
@@ -129,10 +126,16 @@ void Game::startGame(const AInterface& blackPlayer, const AInterface& whitePlaye
 
         if (this->b->play(currentPlayer, playedCoord))
         {
-            togglePlayer();
+            moves = togglePlayer();
         }
 
         std::cout << *b << std::endl;
+
+        if (moves.size() == 0)
+        {
+            this->runningGame = false;
+        }
+        
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
     std::cout << "Game ended" << std::endl;
     std::cout << *b << std::endl;
@@ -163,11 +166,12 @@ void Game::analyseGame(bool displayGrid) const
     std::cout << "|-----------------------|" << std::endl;
     std::cout << "| Vide | Noirs | Blancs |" << std::endl;
     std::cout << "|-----------------------|" << std::endl;
-    std::cout << "|" << std::setw(5) << (this->b->getSize()*this->b->getSize() - this->b->getBlackScore() - this->b->getWhiteScore()) << " |" << std::setw(6) << this->b->getBlackScore() << " |" << std::setw(7) << this->b->getWhiteScore() << " |" << std::endl;
+    std::cout << "|" << std::setw(5) << (this->b->getSize() * this->b->getSize() - this->b->getBlackScore() - this->b->getWhiteScore()) << " |" << std::setw(6) << this->b->getBlackScore() << " |" << std::setw(7) << this->b->getWhiteScore() << " |" << std::endl;
     std::cout << "+-----------------------+" << std::endl;
 
     if (displayGrid)
     {
-        std::cout << "\nGrille de jeu:\n" << *this->b << std::endl;
+        std::cout << "\nGrille de jeu:\n"
+                  << *this->b << std::endl;
     }
 }
