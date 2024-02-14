@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
 #include "../includes/Board.hpp"
 #include "../includes/Game.hpp"
 #include "../includes/AInterface.hpp"
@@ -135,4 +136,37 @@ void Game::startGame(const AInterface& blackPlayer, const AInterface& whitePlaye
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
     std::cout << "Game ended" << std::endl;
     std::cout << *b << std::endl;
+}
+
+void Game::analyseGame(bool displayGrid) const
+{
+    if (!this->b->isGameFinished())
+    {
+        std::cout << "Called analyse on an unfinished game" << std::endl;
+        return;
+    }
+
+    if (this->b->getBlackScore() > this->b->getWhiteScore())
+    {
+        std::cout << "Victoire des noirs" << std::endl;
+    }
+    else if (this->b->getWhiteScore())
+    {
+        std::cout << "Victoire des blancs" << std::endl;
+    }
+    else
+    {
+        std::cout << "Egalité" << std::endl;
+    }
+
+    std::cout << "+-----------------------+" << std::endl;
+    std::cout << "| Vide | Noirs | Blancs |" << std::endl;
+    std::cout << "|-----------------------|" << std::endl;
+    std::cout << "|" << std::setw(5) << (this->b->getSize()*this->b->getSize() - this->b->getBlackScore() - this->b->getWhiteScore()) << " |" << std::setw(6) << this->b->getBlackScore() << " |" << std::setw(7) << this->b->getWhiteScore() << " |" << std::endl;
+    std::cout << "+-----------------------+" << std::endl;
+
+    if (displayGrid)
+    {
+        std::cout << this->b << std::endl;
+    }
 }

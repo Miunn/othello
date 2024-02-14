@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     Random r2(Pawn::WHITE);
     
     game.startGame(r1, r2);
+    game.analyseGame();
 
     return 0;
 }

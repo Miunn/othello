@@ -75,6 +75,21 @@ Board::~Board()
     free(board);
 }
 
+int Board::getSize() const
+{
+    return this->size;
+}
+
+int Board::getBlackScore() const
+{
+    return this->blackScore;
+}
+
+int Board::getWhiteScore() const
+{
+    return this->whiteScore;
+}
+
 /**
  * @brief Check if the coord given is valid for othello gmae
  *

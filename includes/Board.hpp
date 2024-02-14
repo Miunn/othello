@@ -50,6 +50,27 @@ public:
     ~Board();
 
     /**
+     * @brief Get the board's size
+     * 
+     * @return int Board's size
+     */
+    int getSize() const;
+
+    /**
+     * @brief Get the score for blacks
+     * 
+     * @return int Black score
+     */
+    int getBlackScore() const;
+
+    /**
+     * @brief Get the score for whites
+     * 
+     * @return int White score
+     */
+    int getWhiteScore() const;
+
+    /**
      * @brief Check if a given index-coordinate if a valid board coord
      * 
      * @param coord Coordinate to check
@@ -242,6 +263,18 @@ private:
      * 
      */
     Pawn *board;
+
+    /**
+     * @brief Represent the amount of black pawns on the board
+     * 
+     */
+    int blackScore;
+
+    /**
+     * @brief Represeent the amount of white pawns on the board
+     * 
+     */
+    int whiteScore;
 };
 
 #endif

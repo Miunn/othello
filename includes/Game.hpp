@@ -67,6 +67,12 @@ class Game
      */
     void startGame(const AInterface& interface1, const AInterface& interface2);
 
+    /**
+     * @brief Analyse a finished game. Giving scores and winner
+     * 
+     */
+    void analyseGame(bool displayGrid) const;
+
     private:
 
     /**
