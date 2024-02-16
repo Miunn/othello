@@ -43,6 +43,7 @@ public:
     bool canBePlaced(const Pawn &pawn, const std::string &coord) const;
     bool place(const Pawn &pawn, const std::string &coord);
     bool gameFinished(const Pawn &pawn);
+    int getScore(const Pawn &pawn) const;
     bool play(const Pawn &pawn, const std::string &coord);
     std::vector<Direction> getValidDirection(const Pawn &pawn, const std::string &coord) const;
     void switchPawns(const Pawn &placedPawn, const std::string &sourceCoord, Direction direction);

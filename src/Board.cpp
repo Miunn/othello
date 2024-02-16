@@ -502,6 +502,24 @@ bool Board::gameFinished(const Pawn &pawn)
     return getValidMove(pawn).size() == 0;
 }
 
+int Board::getScore(const Pawn &pawn) const
+{
+    int score = 0;
+
+    for (char r = '1'; r <= '8'; r++)
+    {
+        for (char c = 'a'; c <= 'h'; c++)
+        {
+            if (getCoord(string(1, c) + string(1, r)) == pawn)
+            {
+                score++;
+            }
+        }
+    }
+
+    return score;
+}
+
 bool Board::play(const Pawn &pawn, const std::string &coord)
 {
     if (!isValidCoord(coord))
@@ -513,7 +531,11 @@ bool Board::play(const Pawn &pawn, const std::string &coord)
         return false; // Illegal move
 
     if (gameFinished(pawn))
+    {
+        cout << "Game is finished" << endl;
+        cout << "White: " << getScore(Pawn::WHITE) << " - Black: " << getScore(Pawn::BLACK) << endl;
         return false; // Game is finished
+    }
 
     if (!place(pawn, coord))
         return false;
