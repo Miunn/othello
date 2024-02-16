@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <string>
+#include <iomanip>
 #include "../includes/Board.hpp"
 #include "../includes/Game.hpp"
 #include "../includes/Player.hpp"
@@ -74,14 +75,35 @@ int main(int argc, char *argv[])
 
     if (benchmark)
     {
+        int blacksWons = 0;
+        int whiteWons = 0;
+        unsigned long int gameDurations = 0;
         for (int i = 0; i < benchmarkAmount; i++)
         {
             Game game;
+
+            auto t1 = chrono::high_resolution_clock::now();
             game.startGame(*interface1, *interface2);
+            auto t2 = chrono::high_resolution_clock::now();
+            gameDurations += chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
             
-            cout << "=== Game " << i+1 << "/" << benchmarkAmount << "===" << endl;
-            game.analyseGame(displayGridResult);
+            cout << "==== Game " << setw(5) << i+1 << "/" << benchmarkAmount << " ====" << endl;
+            Pawn winner = game.analyseGame(displayGridResult);
+
+            if (winner == Pawn::BLACK)
+            {
+                blacksWons++;
+            }
+            else if (winner == Pawn::WHITE)
+            {
+                whiteWons++;
+            }
         }
+
+        cout << "\n====== Résultats ======" << endl;
+        cout << "[NOIRS ] Victoires: " << blacksWons << endl;
+        cout << "[BLANCS] Victoires: " << whiteWons << endl;
+        cout << "[EXEC  ] Temps moyen d'une partie: " << gameDurations / benchmarkAmount << " \xC2\xB5s" << endl;
     }
     else
     {

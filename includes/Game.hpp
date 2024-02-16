@@ -70,8 +70,10 @@ class Game
     /**
      * @brief Analyse a finished game. Giving scores and winner
      * 
+     * @param displayGrid Tells if the function should display the finished board
+     * @return Pawn Winner pawn
      */
-    void analyseGame(bool displayGrid) const;
+    Pawn analyseGame(bool displayGrid) const;
 
     private:
 

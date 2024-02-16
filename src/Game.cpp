@@ -134,27 +134,31 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
 }
 
-void Game::analyseGame(bool displayGrid) const
+Pawn Game::analyseGame(bool displayGrid) const
 {
     if (!this->b->isGameFinished())
     {
         std::cout << "Called analyse on an unfinished game" << std::endl;
-        return;
+        return Pawn::EMPTY;
     }
 
+    Pawn winner;
     std::cout << "+-----------------------+" << std::endl;
     std::cout << "| Résultat: ";
     if (this->b->getBlackScore() > this->b->getWhiteScore())
     {
         std::cout << std::setw(13) << "Noirs |" << std::endl;
+        winner = Pawn::BLACK;
     }
     else if (this->b->getWhiteScore())
     {
         std::cout << std::setw(13) << "Blancs |" << std::endl;
+        winner = Pawn::WHITE;
     }
     else
     {
         std::cout << std::setw(13) << "Egalité |" << std::endl;
+        winner = Pawn::EMPTY;
     }
     std::cout << "|-----------------------|" << std::endl;
     std::cout << "| Vide | Noirs | Blancs |" << std::endl;
@@ -167,4 +171,5 @@ void Game::analyseGame(bool displayGrid) const
         std::cout << "\nGrille de jeu:\n"
                   << *this->b << std::endl;
     }
+    return winner;
 }
