@@ -45,7 +45,6 @@ std::vector<std::string> Game::togglePlayer()
 
     // No moves for next player
     // Skip his turn
-    std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
     this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
     moves = b->getValidMoves(currentPlayer);
     if (moves.size() != 0)
@@ -97,7 +96,6 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
     // Skip player on first turn if no move
     if (moves.size() == 0)
     {
-        std::cout << "Skip" << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << std::endl;
         if (togglePlayer().size() == 0)
         {
             return;
@@ -106,7 +104,6 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
         moves = b->getValidMoves(currentPlayer);
     }
 
-    std::cout << *b << std::endl;
     do
     {
         if (this->currentPlayer == Pawn::BLACK)
@@ -129,16 +126,12 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
             moves = togglePlayer();
         }
 
-        std::cout << *b << std::endl;
-
         if (moves.size() == 0)
         {
             this->runningGame = false;
         }
         
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
-    std::cout << "Game ended" << std::endl;
-    std::cout << *b << std::endl;
 }
 
 void Game::analyseGame(bool displayGrid) const

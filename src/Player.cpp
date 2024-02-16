@@ -15,6 +15,7 @@ std::string Player::play(const Board& board) const
 {
     std::string coord;
 
+    std::cout << board << std::endl;
     board.printValidMoves(board.getValidMoves(this->player));
     std::cout << (this->player == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << " > ";
     std::cin >> coord;

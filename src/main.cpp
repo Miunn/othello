@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 3)
     {
-        cout << "Invalid number of arguments" << endl;
+        cout << "[ERROR] Invalid number of arguments" << endl;
         return 0;
     }
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "Invalid player 1 argument" << endl;
+        cout << "[ERROR] Invalid player 1 argument" << endl;
         return 0;
     }
 
@@ -43,13 +43,52 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "Invalid player 2 argument" << endl;
+        cout << "[ERROR] Invalid player 2 argument" << endl;
         return 0;
     }
 
-    Game game;
-    game.startGame(*interface1, *interface2);
-    game.analyseGame(true);
+    bool benchmark = false;
+    int benchmarkAmount = 0;
+
+    bool displayGridResult = false;
+
+    for (int i = 3; i < argc; i++)
+    {
+        if (((string)"--benchmark").compare(argv[i]) == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                cout << "[ERROR] Missing benchmark param" << endl;
+                return 0;
+            }
+
+            benchmarkAmount = atoi(argv[i+1]);
+            benchmark = true;
+        }
+
+        if (((string)"--display-grid").compare(argv[i]) == 0)
+        {
+            displayGridResult = true;
+        }
+    }
+
+    if (benchmark)
+    {
+        for (int i = 0; i < benchmarkAmount; i++)
+        {
+            Game game;
+            game.startGame(*interface1, *interface2);
+            
+            cout << "=== Game " << i+1 << "/" << benchmarkAmount << "===" << endl;
+            game.analyseGame(displayGridResult);
+        }
+    }
+    else
+    {
+        Game game;
+        game.startGame(*interface1, *interface2);
+        game.analyseGame(displayGridResult);
+    }
 
     return 0;
 }
