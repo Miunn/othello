@@ -134,7 +134,7 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
 }
 
-Pawn Game::analyseGame(bool displayGrid) const
+Pawn Game::analyseGame(bool verbose, bool displayGrid) const
 {
     if (!this->b->isGameFinished())
     {
@@ -143,22 +143,38 @@ Pawn Game::analyseGame(bool displayGrid) const
     }
 
     Pawn winner;
-    std::cout << "+-----------------------+" << std::endl;
-    std::cout << "| Résultat: ";
     if (this->b->getBlackScore() > this->b->getWhiteScore())
     {
-        std::cout << std::setw(13) << "Noirs |" << std::endl;
         winner = Pawn::BLACK;
     }
-    else if (this->b->getWhiteScore())
+    else if (this->b->getWhiteScore() > this->b->getBlackScore())
     {
-        std::cout << std::setw(13) << "Blancs |" << std::endl;
         winner = Pawn::WHITE;
     }
     else
     {
-        std::cout << std::setw(13) << "Egalité |" << std::endl;
         winner = Pawn::EMPTY;
+    }
+
+    if (!verbose)
+    {
+        return winner;
+    }
+
+
+    std::cout << "+-----------------------+" << std::endl;
+    std::cout << "| Résultat: ";
+    if (winner == Pawn::BLACK)
+    {
+        std::cout << std::setw(13) << "Noirs |" << std::endl;
+    }
+    else if (winner == Pawn::WHITE)
+    {
+        std::cout << std::setw(13) << "Blancs |" << std::endl;
+    }
+    else
+    {
+        std::cout << std::setw(13) << "Egalité |" << std::endl;
     }
     std::cout << "|-----------------------|" << std::endl;
     std::cout << "| Vide | Noirs | Blancs |" << std::endl;

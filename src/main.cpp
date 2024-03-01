@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 
     bool benchmark = false;
     int benchmarkAmount = 0;
+    bool onlyFinal = false;
 
     bool displayGridResult = false;
 
@@ -79,6 +80,11 @@ int main(int argc, char *argv[])
         {
             displayGridResult = true;
         }
+
+        if (((string)"--only-final").compare(argv[i]) == 0)
+        {
+            onlyFinal = true;
+        }
     }
 
     if (benchmark)
@@ -95,8 +101,11 @@ int main(int argc, char *argv[])
             auto t2 = chrono::high_resolution_clock::now();
             gameDurations += chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
             
-            cout << "==== Game " << setw(5) << i+1 << "/" << benchmarkAmount << " ====" << endl;
-            Pawn winner = game.analyseGame(displayGridResult);
+            if (!onlyFinal)
+            {
+                cout << "==== Game " << setw(5) << i+1 << "/" << benchmarkAmount << " ====" << endl;
+            }
+            Pawn winner = game.analyseGame(!onlyFinal, displayGridResult);
 
             if (winner == Pawn::BLACK)
             {
@@ -117,7 +126,7 @@ int main(int argc, char *argv[])
     {
         Game game;
         game.startGame(*interface1, *interface2);
-        game.analyseGame(displayGridResult);
+        game.analyseGame(true, displayGridResult);
     }
 
     return 0;
