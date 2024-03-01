@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
     {
         interface1 = new Random(Pawn::BLACK);
     }
+    else if (((string)"minmax").compare(argv[1]) == 0)
+    {
+        interface1 = new MinMax(Pawn::BLACK);
+    }
     else
     {
         cout << "[ERROR] Invalid player 1 argument" << endl;
@@ -42,6 +46,10 @@ int main(int argc, char *argv[])
     {
         interface2 = new Random(Pawn::WHITE);
     }
+    else if (((string)"minmax").compare(argv[2]) == 0)
+    {
+        interface2 = new MinMax(Pawn::WHITE);
+    }
     else
     {
         cout << "[ERROR] Invalid player 2 argument" << endl;
@@ -50,6 +58,7 @@ int main(int argc, char *argv[])
 
     bool benchmark = false;
     int benchmarkAmount = 0;
+    bool onlyFinal = false;
 
     bool displayGridResult = false;
 
@@ -71,12 +80,18 @@ int main(int argc, char *argv[])
         {
             displayGridResult = true;
         }
+
+        if (((string)"--only-final").compare(argv[i]) == 0)
+        {
+            onlyFinal = true;
+        }
     }
 
     if (benchmark)
     {
         int blacksWons = 0;
         int whiteWons = 0;
+        int draws = 0;
         unsigned long int gameDurations = 0;
         for (int i = 0; i < benchmarkAmount; i++)
         {
@@ -87,8 +102,11 @@ int main(int argc, char *argv[])
             auto t2 = chrono::high_resolution_clock::now();
             gameDurations += chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
             
-            cout << "==== Game " << setw(5) << i+1 << "/" << benchmarkAmount << " ====" << endl;
-            Pawn winner = game.analyseGame(displayGridResult);
+            if (!onlyFinal)
+            {
+                cout << "==== Game " << setw(5) << i+1 << "/" << benchmarkAmount << " ====" << endl;
+            }
+            Pawn winner = game.analyseGame(!onlyFinal, displayGridResult);
 
             if (winner == Pawn::BLACK)
             {
@@ -98,18 +116,23 @@ int main(int argc, char *argv[])
             {
                 whiteWons++;
             }
+            else
+            {
+                draws++;
+            }
         }
 
         cout << "\n====== Résultats ======" << endl;
-        cout << "[NOIRS ] Victoires: " << blacksWons << " (" << blacksWons/(double)benchmarkAmount*100 << "%)" << endl;
-        cout << "[BLANCS] Victoires: " << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
+        cout << "[NOIRS ] Victoires: " << setw(6) << blacksWons << " (" << blacksWons/(double)benchmarkAmount*100 << "%)" << endl;
+        cout << "[BLANCS] Victoires: " << setw(6) << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
+        cout << "[******] Egalités: " << setw(7) << draws << " (" << draws/(double)benchmarkAmount*100 << "%)"  << endl;
         cout << "[EXEC  ] Temps moyen d'une partie: " << gameDurations / benchmarkAmount << " \xC2\xB5s" << endl;
     }
     else
     {
         Game game;
         game.startGame(*interface1, *interface2);
-        game.analyseGame(displayGridResult);
+        game.analyseGame(true, displayGridResult);
     }
 
     return 0;

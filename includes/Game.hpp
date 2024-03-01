@@ -73,7 +73,7 @@ class Game
      * @param displayGrid Tells if the function should display the finished board
      * @return Pawn Winner pawn
      */
-    Pawn analyseGame(bool displayGrid) const;
+    Pawn analyseGame(bool verbose, bool displayGrid) const;
 
     private:
 
