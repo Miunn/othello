@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
     {
         int blacksWons = 0;
         int whiteWons = 0;
+        int draws = 0;
         unsigned long int gameDurations = 0;
         for (int i = 0; i < benchmarkAmount; i++)
         {
@@ -115,11 +116,16 @@ int main(int argc, char *argv[])
             {
                 whiteWons++;
             }
+            else
+            {
+                draws++;
+            }
         }
 
         cout << "\n====== Résultats ======" << endl;
-        cout << "[NOIRS ] Victoires: " << blacksWons << " (" << blacksWons/(double)benchmarkAmount*100 << "%)" << endl;
-        cout << "[BLANCS] Victoires: " << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
+        cout << "[NOIRS ] Victoires: " << setw(6) << blacksWons << " (" << blacksWons/(double)benchmarkAmount*100 << "%)" << endl;
+        cout << "[BLANCS] Victoires: " << setw(6) << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
+        cout << "[******] Egalités: " << setw(7) << draws << " (" << draws/(double)benchmarkAmount*100 << "%)"  << endl;
         cout << "[EXEC  ] Temps moyen d'une partie: " << gameDurations / benchmarkAmount << " \xC2\xB5s" << endl;
     }
     else
