@@ -24,6 +24,7 @@ int MinMax::heuristic(const Board &B) const
             }
         }
     }
+    return score;
 }
 
 std::string MinMax::play(const Board &board) const
