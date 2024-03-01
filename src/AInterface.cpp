@@ -10,8 +10,8 @@ void AInterface::showScores() const
         {
             std::cout << std::endl;
         }
-        
-        std::cout << std::setw(4) << scores[i] << " ";
+
+        std::cout << std::setw(4) << payoff_matrix[i] << " ";
     }
 }
 
