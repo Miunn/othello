@@ -511,7 +511,7 @@ vector<string> Board::getValidMoves(const Pawn &pawn) const
 
 void Board::printValidMoves(vector<string> moves) const
 {
-    for (int i = 0; i < (int) moves.size(); i++)
+    for (int i = 0; i < (int)moves.size(); i++)
     {
         cout << moves[i] << " ";
     }
@@ -524,7 +524,7 @@ bool Board::place(const Pawn &pawn, const int &coord)
         return false;
 
     setCoord(pawn, coord);
-    
+
     if (pawn == Pawn::BLACK)
     {
         blackScore++;

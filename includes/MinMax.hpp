@@ -3,12 +3,13 @@
 #include <iostream>
 #include "AInterface.hpp"
 
-class MinMax: public AInterface
+class MinMax : public AInterface
 {
-    public:
+public:
     MinMax();
     MinMax(Pawn player);
-    std::string play(const Board& board) const override;
+    int heuristic(const Board &board) const;
+    std::string play(const Board &board) const override;
 };
 
 #endif
