@@ -38,6 +38,8 @@ class AInterface
      */
     Pawn player;
 
+    Pawn ennemy;
+
     /**
      * @brief Pay off matrix
      * 

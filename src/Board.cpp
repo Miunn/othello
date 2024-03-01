@@ -69,6 +69,20 @@ Board::Board()
     whiteScore = 2;
 }
 
+Board::Board(const Board& board)
+{
+    this->size = board.size;
+    this->board = (Pawn *)calloc(size * size, sizeof(Pawn));
+
+    for (int i = 0; i < size*size; i++)
+    {
+        this->board[i] = board.getCoord(i);
+    }
+
+    this->blackScore = board.blackScore;
+    this->whiteScore = board.whiteScore;
+}
+
 /**
  * @brief Destroy the Board object
  *

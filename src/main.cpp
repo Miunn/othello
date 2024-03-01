@@ -12,10 +12,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    MinMax *minmax = new MinMax();
+    MinMax *minmax = new MinMax(5);
     Game game;
-    game.getBoard()->play(Pawn::BLACK, "d3");
 
-    cout << minmax->heuristic(*game.getBoard()) << endl;
+    std::cout << minmax->play_research(*game.getBoard(), 0) << std::endl;
+
     return 0;
 }

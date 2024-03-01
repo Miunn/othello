@@ -44,6 +44,13 @@ public:
     Board();
 
     /**
+     * @brief Copy constructr for Board object
+     * 
+     * @param board 
+     */
+    Board(const Board& board);
+
+    /**
      * @brief Destroy the Board object
      * 
      */
