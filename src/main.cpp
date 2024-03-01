@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
     {
         interface1 = new Random(Pawn::BLACK);
     }
+    else if (((string)"minmax").compare(argv[1]) == 0)
+    {
+        interface1 = new MinMax(Pawn::BLACK);
+    }
     else
     {
         cout << "[ERROR] Invalid player 1 argument" << endl;
@@ -41,6 +45,10 @@ int main(int argc, char *argv[])
     else if (((string)"random").compare(argv[2]) == 0)
     {
         interface2 = new Random(Pawn::WHITE);
+    }
+    else if (((string)"minmax").compare(argv[2]) == 0)
+    {
+        interface2 = new MinMax(Pawn::WHITE);
     }
     else
     {
