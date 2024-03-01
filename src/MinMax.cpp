@@ -18,9 +18,10 @@ int MinMax::heuristic(const Board &B) const
     {
         for (int j = 0; j < B.getSize(); j++)
         {
-            if (B.getCoord(i * B.getSize() + j) == this->player)
+            int c = i * B.getSize() + j;
+            if (B.getCoord(c) == this->player)
             {
-                score += this->payoff_matrix[i * B.getSize() + j];
+                score += this->payoff_matrix[c];
             }
         }
     }
