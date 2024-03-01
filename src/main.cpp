@@ -101,8 +101,8 @@ int main(int argc, char *argv[])
         }
 
         cout << "\n====== Résultats ======" << endl;
-        cout << "[NOIRS ] Victoires: " << blacksWons << endl;
-        cout << "[BLANCS] Victoires: " << whiteWons << endl;
+        cout << "[NOIRS ] Victoires: " << blacksWons << " (" << blacksWons/(double)benchmarkAmount*100 << "%)" << endl;
+        cout << "[BLANCS] Victoires: " << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
         cout << "[EXEC  ] Temps moyen d'une partie: " << gameDurations / benchmarkAmount << " \xC2\xB5s" << endl;
     }
     else
