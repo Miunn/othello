@@ -42,7 +42,7 @@ class AInterface
      * @brief Pay off matrix
      * 
      */
-    int scores[64] = {
+    int payoff_matrix[64] = {
         500, -150, 30, 10, 10, 30, -150, 500,
         -150, -250, 0, 0, 0, 0, -250, -150,
         30, 0, 1, 2, 2, 1, 0, 30,
