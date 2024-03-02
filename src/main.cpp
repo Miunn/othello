@@ -17,5 +17,7 @@ int main(int argc, char *argv[])
 
     std::cout << minmax->play_research(*game.getBoard(), 0) << std::endl;
 
+    std::cout << minmax->play(*game.getBoard()) << std::endl;
+
     return 0;
 }

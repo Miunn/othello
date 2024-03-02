@@ -57,7 +57,23 @@ std::vector<Board*> MinMax::computeSubBoards(const Board &board, Pawn pawn) cons
 
 std::string MinMax::play(const Board &board) const
 {
-    return board.getValidMoves(this->player)[0];
+    std::vector<std::string> moves = board.getValidMoves(this->player);
+    std::vector<int> scores = {};
+    for (int i = 0; i < (int) moves.size(); i++)
+    {
+        scores.push_back(play_research(board, 0));
+    }
+
+    int max_index = 0;
+    for (int i = 1; i < (int) scores.size(); i++)
+    {
+        if (scores.at(i) > scores.at(max_index))
+        {
+            max_index = i;
+        }
+    }
+
+    return moves.at(max_index);
 }
 
 int MinMax::play_research(const Board &board, int depth) const
