@@ -59,6 +59,7 @@ Board::Board()
 {
     size = 8;
     board = (Pawn *)calloc(size * size, sizeof(Pawn));
+    currentPlayer = Pawn::BLACK;
 
     setCoord(Pawn::WHITE, coordToIndex("d4"));
     setCoord(Pawn::WHITE, coordToIndex("e5"));
@@ -105,6 +106,26 @@ int Board::getBlackScore() const
 int Board::getWhiteScore() const
 {
     return this->whiteScore;
+}
+
+Pawn Board::getCurrentPlayer() const
+{
+    return this->currentPlayer;
+}
+
+void Board::togglePlayer()
+{
+    // Change the player
+    this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
+    std::vector<std::string> moves = this->getValidMoves(currentPlayer);
+    if (moves.size() != 0)
+    {
+        return; // No problem
+    }
+
+    // No moves for next player
+    // Skip his turn
+    this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
 }
 
 /**
@@ -556,14 +577,14 @@ bool Board::isGameFinished() const
     return getValidMoves(Pawn::BLACK).size() == 0 && getValidMoves(Pawn::WHITE).size() == 0;
 }
 
-bool Board::play(const Pawn &pawn, const std::string &coord)
+bool Board::play(const std::string &coord)
 {
     int indexCoord = coordToIndex(coord);
 
     if (!isValidCoord(indexCoord))
         return false;
 
-    Direction moveDirection = getValidDirection(pawn, indexCoord);
+    Direction moveDirection = getValidDirection(this->currentPlayer, indexCoord);
 
     if (moveDirection == 0)
         return false; // Illegal move
@@ -571,10 +592,11 @@ bool Board::play(const Pawn &pawn, const std::string &coord)
     if (isGameFinished())
         return false; // Game is finished
 
-    if (!place(pawn, indexCoord))
+    if (!place(this->currentPlayer, indexCoord))
         return false;
 
-    switchPawns(pawn, indexCoord, moveDirection);
+    switchPawns(this->currentPlayer, indexCoord, moveDirection);
 
+    this->togglePlayer();
     return true;
 }

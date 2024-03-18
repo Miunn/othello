@@ -47,14 +47,6 @@ class Game
     Pawn getCurrentPlayer() const;
 
     /**
-     * @brief Toggle the player. If no moves are possible for the player, skip his turn
-     * If no moves available for both player, end the game by setting runningGame to false
-     * 
-     * @return std::vector<std::string> Moves available for the new player. Empty if game ended
-     */
-    std::vector<std::string> togglePlayer();
-
-    /**
      * @brief Read a move from stdin and try to play it
      * 
      * @return std::string Played move
@@ -76,12 +68,6 @@ class Game
     Pawn analyseGame(bool verbose, bool displayGrid) const;
 
     private:
-
-    /**
-     * @brief Current player representation
-     * 
-     */
-    Pawn currentPlayer;
 
     /**
      * @brief Game board object

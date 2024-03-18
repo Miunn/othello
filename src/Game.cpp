@@ -9,14 +9,12 @@
 Game::Game()
 {
     this->b = new Board;
-    this->currentPlayer = Pawn::BLACK;
     this->runningGame = false;
 }
 
 Game::Game(Board *b, Pawn player)
 {
     this->b = b;
-    this->currentPlayer = player;
 }
 
 Game::~Game()
@@ -30,43 +28,19 @@ Board *Game::getBoard() const
 
 Pawn Game::getCurrentPlayer() const
 {
-    return this->currentPlayer;
-}
-
-std::vector<std::string> Game::togglePlayer()
-{
-    // Change the player
-    this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
-    std::vector<std::string> moves = b->getValidMoves(currentPlayer);
-    if (moves.size() != 0)
-    {
-        return moves; // No problem
-    }
-
-    // No moves for next player
-    // Skip his turn
-    this->currentPlayer = this->currentPlayer == Pawn::BLACK ? Pawn::WHITE : Pawn::BLACK;
-    moves = b->getValidMoves(currentPlayer);
-    if (moves.size() != 0)
-    {
-        return moves; // No problem
-    }
-
-    // Game finished
-    this->runningGame = false;
-    return {};
+    return this->getBoard()->getCurrentPlayer();
 }
 
 std::string Game::readAndPlayFromSTDin()
 {
     std::string coord;
 
-    std::cout << (currentPlayer == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << " > ";
+    std::cout << (this->getBoard()->getCurrentPlayer() == Pawn::BLACK ? "[BLACK]" : "[WHITE]") << " > ";
     std::cin >> coord;
 
-    if (this->b->play(currentPlayer, coord))
+    if (this->b->play(coord))
     {
-        togglePlayer();
+        this->b->togglePlayer();
         return coord;
     }
     std::cout << "Played false" << std::endl;
@@ -91,22 +65,18 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
         return;
     }
 
-    std::vector<std::string> moves = b->getValidMoves(currentPlayer);
+    std::vector<std::string> moves = b->getValidMoves(this->getBoard()->getCurrentPlayer());
     
     // Skip player on first turn if no move
     if (moves.size() == 0)
     {
-        if (togglePlayer().size() == 0)
-        {
-            return;
-        }
-
-        moves = b->getValidMoves(currentPlayer);
+        this->b->togglePlayer();
+        moves = b->getValidMoves(this->getBoard()->getCurrentPlayer());
     }
 
     do
     {
-        if (this->currentPlayer == Pawn::BLACK)
+        if (this->getBoard()->getCurrentPlayer() == Pawn::BLACK)
         {
             playedCoord = blackPlayer.play(*this->b);
         }
@@ -121,12 +91,12 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
             break;
         }
 
-        if (this->b->play(currentPlayer, playedCoord))
+        if (this->b->play(playedCoord))
         {
-            moves = togglePlayer();
+            this->b->togglePlayer();
         }
 
-        if (moves.size() == 0)
+        if (this->b->isGameFinished())
         {
             this->runningGame = false;
         }

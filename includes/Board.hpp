@@ -78,6 +78,21 @@ public:
     int getWhiteScore() const;
 
     /**
+     * @brief Get the Current Player object
+     * 
+     * @return Pawn 
+     */
+    Pawn getCurrentPlayer() const;
+
+    /**
+     * @brief Toggle the player. If no moves are possible for the player, skip his turn
+     * If no moves available for both player, end the game by setting runningGame to false
+     * 
+     * @return std::vector<std::string> Moves available for the new player. Empty if game ended
+     */
+    void togglePlayer();
+
+    /**
      * @brief Check if a given index-coordinate if a valid board coord
      * 
      * @param coord Coordinate to check
@@ -132,7 +147,7 @@ public:
      * @return true If the move could have been made
      * @return false If the move is illegal
      */
-    bool play(const Pawn& pawn, const std::string& coord);
+    bool play(const std::string& coord);
 
     /**
      * @brief Get all valid direction for a pawn at a given coordinate
@@ -289,6 +304,12 @@ private:
      * 
      */
     int whiteScore;
+
+    /**
+     * @brief Player turn
+     * 
+     */
+    Pawn currentPlayer;
 };
 
 #endif
