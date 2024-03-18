@@ -49,7 +49,7 @@ std::vector<Board*> MinMax::computeSubBoards(const Board &board, Pawn pawn) cons
     for (int j = 0; j < (int)moves.size(); j++)
     {
         Board *copy_board = new Board(board);
-        copy_board->play(pawn, moves.at(j));
+        copy_board->play(moves.at(j));
         depth_boards.push_back(copy_board);
     }
     return depth_boards;
@@ -61,7 +61,7 @@ std::string MinMax::play(const Board &board) const
     std::vector<int> scores = {};
     for (int i = 0; i < (int) moves.size(); i++)
     {
-        scores.push_back(play_research(board, 0));
+        scores.push_back(play_research(board, 0, board.getCurrentPlayer()));
     }
 
     int max_index = 0;
@@ -76,7 +76,7 @@ std::string MinMax::play(const Board &board) const
     return moves.at(max_index);
 }
 
-int MinMax::play_research(const Board &board, int depth) const
+int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
 {
     std::cout << "Called play research at depth:" << depth << std::endl;
     if (this->depth == depth)
@@ -106,10 +106,10 @@ int MinMax::play_research(const Board &board, int depth) const
 
     for (int i = 0; i < (int)sub_boards.size(); i++)
     {
-        scores.push_back(this->play_research(*sub_boards.at(i), depth+1));
+        scores.push_back(this->play_research(*sub_boards.at(i), depth+1, maxPawn));
     }
 
-    if (depth % 2 == 0)
+    if (board.getCurrentPlayer() == maxPawn)
     {
         std::cout << "Get max of: ";
         for (int i = 0; i < (int) scores.size(); i++)
