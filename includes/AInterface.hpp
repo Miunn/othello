@@ -1,6 +1,7 @@
 #ifndef AINTERFACE_H
 #define AINTERFACE_H
 #include <iostream>
+#include <string>
 #include "Board.hpp"
 
 /**

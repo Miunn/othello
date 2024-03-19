@@ -13,9 +13,14 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     MinMax *minmax = new MinMax(5);
+    Player *player = new Player(Pawn::WHITE);
     Game game;
 
+    std::cout << "Before" << std::endl;
     std::cout << minmax->play(*game.getBoard()) << std::endl;
+    std::cout << "Played" << std::endl;
+
+    game.startGame(*minmax, *player);
 
     return 0;
 }

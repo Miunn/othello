@@ -74,6 +74,7 @@ Board::Board(const Board& board)
 {
     this->size = board.size;
     this->board = (Pawn *)calloc(size * size, sizeof(Pawn));
+    this->currentPlayer = board.getCurrentPlayer();
 
     for (int i = 0; i < size*size; i++)
     {

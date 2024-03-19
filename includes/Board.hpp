@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 #include <vector>
+#include <string>
 
 /**
  * @brief Represent a Pawn in a Board

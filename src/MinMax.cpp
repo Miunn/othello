@@ -63,7 +63,8 @@ std::string MinMax::play(const Board &board) const
     {
         Board *copy_board = new Board(board);
         copy_board->play(moves[i]);
-        scores.push_back(play_research(*copy_board, 0, board.getCurrentPlayer()));
+        scores.push_back(play_research(*copy_board, 1, board.getCurrentPlayer()));
+        copy_board->~Board();
     }
 
     int max_index = 0;
@@ -75,6 +76,7 @@ std::string MinMax::play(const Board &board) const
         }
     }
 
+    std::cout << "Minmax suggest: " << moves.at(max_index) << std::endl;
     return moves.at(max_index);
 }
 
