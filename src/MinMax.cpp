@@ -42,10 +42,10 @@ int MinMax::heuristic(const Board &B) const
     return score;
 }
 
-std::vector<Board*> MinMax::computeSubBoards(const Board &board, Pawn pawn) const
+std::vector<Board*> MinMax::computeSubBoards(const Board &board) const
 {
     std::vector<Board*> depth_boards = {};
-    std::vector<std::string> moves = board.getValidMoves(pawn);
+    std::vector<std::string> moves = board.getValidMoves(board.getCurrentPlayer());
     for (int j = 0; j < (int)moves.size(); j++)
     {
         Board *copy_board = new Board(board);
@@ -61,7 +61,9 @@ std::string MinMax::play(const Board &board) const
     std::vector<int> scores = {};
     for (int i = 0; i < (int) moves.size(); i++)
     {
-        scores.push_back(play_research(board, 0, board.getCurrentPlayer()));
+        Board *copy_board = new Board(board);
+        copy_board->play(moves[i]);
+        scores.push_back(play_research(*copy_board, 0, board.getCurrentPlayer()));
     }
 
     int max_index = 0;
@@ -78,31 +80,16 @@ std::string MinMax::play(const Board &board) const
 
 int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
 {
-    std::cout << "Called play research at depth:" << depth << std::endl;
     if (this->depth == depth)
     {
-        std::cout << "Max depth reached, send heuristic score -> " << this->heuristic(board) << std::endl;
         return this->heuristic(board);
     }
 
 
     std::vector<Board*> sub_boards;
-    if (depth % 2 == 0)
-    {
-        sub_boards = this->computeSubBoards(board, this->player);
-    }
-    else
-    {
-        sub_boards = this->computeSubBoards(board, this->ennemy);
-    }
-    std::vector<int> scores = {};
+    sub_boards = this->computeSubBoards(board);
 
-    std::cout << "Computed board for d=" << depth << ": " << sub_boards.size() << std::endl;
-    for (int i = 0; i < (int)sub_boards.size(); i++)
-    {
-        std::cout << "Subboard " << i << ":" << std::endl;
-        std::cout << *sub_boards.at(i) << std::endl;
-    }
+    std::vector<int> scores = {};
 
     for (int i = 0; i < (int)sub_boards.size(); i++)
     {
@@ -111,22 +98,10 @@ int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
 
     if (board.getCurrentPlayer() == maxPawn)
     {
-        std::cout << "Get max of: ";
-        for (int i = 0; i < (int) scores.size(); i++)
-        {
-            std::cout << scores.at(i) << " ";
-        }
-        std::cout << std::endl;
         return (int) *std::max_element(scores.begin(), scores.end());
     }
     else
     {
-        std::cout << "Get min of: ";
-        for (int i = 0; i < (int) scores.size(); i++)
-        {
-            std::cout << scores.at(i) << " ";
-        }
-        std::cout << std::endl;
         return (int) *std::min_element(scores.begin(), scores.end());
     }
 }

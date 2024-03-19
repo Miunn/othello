@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
     MinMax *minmax = new MinMax(5);
     Game game;
 
-    std::cout << minmax->play_research(*game.getBoard(), 0, Pawn::BLACK) << std::endl;
-
     std::cout << minmax->play(*game.getBoard()) << std::endl;
 
     return 0;

@@ -10,7 +10,7 @@ public:
     MinMax(Pawn player, int depth);
     int heuristic(const Board &board) const;
     int play_research(const Board &board, int depth, Pawn maxPawn) const;
-    std::vector<Board*> computeSubBoards(const Board &board, Pawn pawn) const;
+    std::vector<Board*> computeSubBoards(const Board &board) const;
     std::string play(const Board &board) const override;
 
 private:
