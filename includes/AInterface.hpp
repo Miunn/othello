@@ -4,6 +4,13 @@
 #include <string>
 #include "Board.hpp"
 
+typedef enum: unsigned short
+{
+  POSITIONNEL = 0,
+  ABSOLU = 1,
+  MOBILITE = 2,
+} Strategy;
+
 /**
  * @brief Interface for the differents AI algorithms of the project
  * 
@@ -40,6 +47,8 @@ class AInterface
     Pawn player;
 
     Pawn ennemy;
+
+    Strategy strategy;
 
     /**
      * @brief Pay off matrix

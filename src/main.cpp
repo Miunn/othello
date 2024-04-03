@@ -12,9 +12,11 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    MinMax *minmax = new MinMax(5);
+    MinMax *minmax = new MinMax(5, Strategy::ABSOLU);
     Player *player = new Player(Pawn::WHITE);
     Game game;
+
+    std::cout << game.getBoard()->coordToIndex("b3") << std::endl;
 
     std::cout << "Before" << std::endl;
     std::cout << minmax->play(*game.getBoard()) << std::endl;

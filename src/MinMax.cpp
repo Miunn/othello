@@ -2,14 +2,15 @@
 #include <bits/stdc++.h> 
 #include "../includes/MinMax.hpp"
 
-MinMax::MinMax(int depth)
+MinMax::MinMax(int depth, Strategy strategy)
 {
     this->player = Pawn::BLACK;
     this->ennemy = Pawn::WHITE;
     this->depth = depth;
+    this->strategy = strategy;
 }
 
-MinMax::MinMax(Pawn player, int depth)
+MinMax::MinMax(Pawn player, int depth, Strategy strategy)
 {
     this->player = player;
 
@@ -23,9 +24,28 @@ MinMax::MinMax(Pawn player, int depth)
     }
 
     this->depth = depth;
+    this->strategy = strategy;
 }
 
 int MinMax::heuristic(const Board &B) const
+{
+    switch (this->strategy)
+    {
+    case POSITIONNEL:
+        return heuristic_pos(B);
+    
+    case ABSOLU:
+        return heuristic_abs(B);
+
+    case MOBILITE:
+        return heuristic_mob(B);
+
+    default:
+        return -1;
+    }
+}
+
+int MinMax::heuristic_pos(const Board &B) const
 {
     int score = 0;
     for (int i = 0; i < B.getSize(); i++)
@@ -40,6 +60,24 @@ int MinMax::heuristic(const Board &B) const
         }
     }
     return score;
+}
+
+int MinMax::heuristic_abs(const Board &B) const
+{
+    // Care to the sign for the operation
+    if (this->player == Pawn::BLACK)
+    {
+        return B.getBlackScore() - B.getWhiteScore();
+    }
+    else
+    {
+        return B.getWhiteScore() - B.getBlackScore();
+    }
+}
+
+int MinMax::heuristic_mob(const Board &B) const
+{
+    return 0;
 }
 
 std::vector<Board*> MinMax::computeSubBoards(const Board &board) const
