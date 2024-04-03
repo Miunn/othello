@@ -152,7 +152,7 @@ int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
     {
         return this->heuristic(board);
     }
-    else
+    else if (sub_boards.size() == 0)
     {
         return INT32_MIN;
     }
