@@ -36,7 +36,7 @@
 
 #outline(
   title: [Liste des figures],
-  target: figure.where(kind: image),
+  target: figure.where(kind: figure),
 )
 
 #pagebreak()
@@ -53,32 +53,41 @@ Le projet a été développé en C++, l'archive fournie contient donc les source
 
 L'architecture complète est la suivante :
 
-```
-Othello/
-|- bin/
-|  |- *.o
-|
-|- includes/
-|  |- AInterface.hpp
-|  |- Board.hpp
-|  |- Game.hpp
-|  |- MinMax.hpp
-|  |- AlphaBeta.hpp
-|  |- Random.hpp
-|  |- Player.hpp
-|- src/
-|  |- AInterface.cpp
-|  |- Board.cpp
-|  |- Game.cpp
-|  |- MinMax.cpp
-|  |- AlphaBeta.cpp
-|  |- Random.cpp
-|  |- Player.cpp
-|  |- main.cpp
-|
-|- makefile
-|- rendu.pdf
-```
+#figure(
+  rect(
+    width: 75%,
+    inset: 15pt,
+    align(left, ```
+    Othello/
+    |- bin/
+    |  |- *.o
+    |
+    |- includes/
+    |  |- AInterface.hpp
+    |  |- Board.hpp
+    |  |- Game.hpp
+    |  |- MinMax.hpp
+    |  |- AlphaBeta.hpp
+    |  |- Random.hpp
+    |  |- Player.hpp
+    |- src/
+    |  |- AInterface.cpp
+    |  |- Board.cpp
+    |  |- Game.cpp
+    |  |- MinMax.cpp
+    |  |- AlphaBeta.cpp
+    |  |- Random.cpp
+    |  |- Player.cpp
+    |  |- main.cpp
+    |
+    |- makefile
+    |- rendu.pdf
+    ```)
+  ),
+  supplement: "Figure",
+  kind: figure,
+  caption: "Architecture du projet",
+) <architecture_projet>
 
 #pagebreak()
 
@@ -93,7 +102,7 @@ En premier lieu, la classe `Board` définie deux types d'énumérations :
 - Le type `Pawn`
 - Le type `Direction`
 
-=== Le type `Pawn`
+=== Type `Pawn`
 
 Le type Pawn servira à représenter un pion dans le reste des sources. Sa définition est :
 
@@ -106,7 +115,7 @@ typedef enum : unsigned short
 } Pawn;
 ```
 
-=== Le type `Direction`
+=== Type `Direction`
 
 Le type `Direction` représentera une direction dans les fonctions de vérification de validité des jeux et de placement des pions. Sa définition est :
 
@@ -164,12 +173,79 @@ Cette définition générale correspond à la classe `AInterface` dont la décla
 
 == `AInterface.hpp`
 
+Le standard définit par la classe `AInterface` contient les méthodes :
+
+- ```cpp
+virtual std::string play(const Board& board) const = 0;
+```
+- ```cpp
+Pawn getPlayer() const;
+```
+- ```cpp
+void showScores() const;
+```
+
+La fonction `play()` est décrite comme fonction virtuelle non définie dans le code de classe puisqu'elle est destinée à être implémentée dans les différents algorithmes d'intelligence.
+
+La présence de cette fonction dans l'interface permet à la classe `Game` de l'appeler sans se soucier de l'algorithme utilisé.
+
+Et les attributs :
+- ```cpp
+Pawn player;
+```
+- ```cpp
+Pawn ennemy;
+```
+- ```cpp
+Strategy strategy;
+```
+- ```cpp
+int payoff_matrix[64];
+```
+
+La variable `payoff_matrix` correspond à la matrice des poids statistiques d'une grille `8x8`, ici nous utilisons la matrice présentée par la @payoff_matrix
+
+#figure(
+  $ mat(
+          500, -150, 30, 10, 10, 30, -150,  500;
+          -150, -250,  0,  0,  0,  0, -250, -150;
+            30,    0,  1,  2,  2,  1,    0,  30;
+            10,    0,  2, 16, 16,  2,    0,  10;
+            10,    0,  2, 16, 16,  2,    0,  10;
+            30,    0,  1,  2,  2,  1,    0,  30;
+          -150, -250,  0,  0,  0,  0, -250, -150;
+          500, -150, 30, 10, 10, 30, -150,  500;
+  ) $,
+  supplement: "Figure",
+  kind: figure,
+  caption: "Matrice de poids statistiques utilisée",
+) <payoff_matrix>
+
 == `Minmax.hpp`
+
+
 
 == `AlphaBeta.hpp`
 
 = Stratégies
 
+Les stratégies _positionnelle_, _absolue_, _mobilité_ et _mixte_ ont été implémentée pour les algorithmes MinMax et AlphaBeta.
+
+L'algorithme choisit l'heuristique correspondant à la stratégie donnée en paramètre lors de son initialisation.
+
+== Positionnelle
+
+== Absolue
+
+== Mobilité
+
+= Statistiques
+
+Comparaison des différentes stratégies et algorithmes mis en place.
+
 = Problèmes rencontrés
 
+= Perspectives d'amélioration
+
 = Conclusion
+
