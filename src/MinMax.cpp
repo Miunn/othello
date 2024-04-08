@@ -95,19 +95,15 @@ std::vector<Board*> MinMax::computeSubBoards(const Board &board) const
 
 std::string MinMax::play(const Board &board) const
 {
-    std::cout << "Called play" << std::endl;
     std::vector<std::string> moves = board.getValidMoves(this->player);
     std::vector<int> scores = {};
-    std::cout << "Moves:" << moves.size() << std::endl;
     for (int i = 0; i < (int) moves.size(); i++)
     {
         Board *copy_board = new Board(board);
         copy_board->play(moves[i]);
-        std::cout << "Played on board, call play_research" << std::endl;
         scores.push_back(play_research(*copy_board, 1, board.getCurrentPlayer()));
         copy_board->~Board();
     }
-    std::cout << "Research ok" << std::endl;
 
     int max_index = 0;
     for (int i = 1; i < (int) scores.size(); i++)
@@ -118,8 +114,6 @@ std::string MinMax::play(const Board &board) const
         }
     }
 
-    std::cout << "Minmax suggest: " << moves.at(max_index) << std::endl;
-    std::cout << board << std::endl;
     return moves.at(max_index);
 }
 

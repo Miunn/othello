@@ -65,7 +65,6 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
         return;
     }
 
-    std::cout << "Setup ok" << std::endl;
     std::vector<std::string> moves = b->getValidMoves(this->getBoard()->getCurrentPlayer());
     
     // Skip player on first turn if no move

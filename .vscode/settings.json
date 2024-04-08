@@ -76,6 +76,8 @@
     "typeindex": "cpp",
     "valarray": "cpp",
     "expected": "cpp",
-    "forward_list": "cpp"
+    "forward_list": "cpp",
+    "future": "cpp",
+    "mutex": "cpp"
   }
 }
