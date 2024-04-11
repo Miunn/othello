@@ -227,6 +227,8 @@ La variable `payoff_matrix` correspond à la matrice des poids statistiques d'un
 
 == `AlphaBeta.hpp`
 
+
+
 = Stratégies
 
 Les stratégies _positionnelle_, _absolue_, _mobilité_ et _mixte_ ont été implémentée pour les algorithmes MinMax et AlphaBeta.

@@ -2,14 +2,15 @@
 #include <bits/stdc++.h>
 #include "../includes/AlphaBeta.hpp"
 
-AlphaBeta::AlphaBeta(int depth)
+AlphaBeta::AlphaBeta(int depth, Strategy strategy)
 {
     this->player = Pawn::BLACK;
     this->ennemy = Pawn::WHITE;
     this->depth = depth;
+    this->strategy = strategy;
 }
 
-AlphaBeta::AlphaBeta(Pawn player, int depth)
+AlphaBeta::AlphaBeta(Pawn player, int depth, Strategy strategy)
 {
     this->player = player;
 
@@ -23,9 +24,28 @@ AlphaBeta::AlphaBeta(Pawn player, int depth)
     }
 
     this->depth = depth;
+    this->strategy = strategy;
 }
 
 int AlphaBeta::heuristic(const Board &B) const
+{
+    switch (this->strategy)
+    {
+    case POSITIONNEL:
+        return heuristic_pos(B);
+
+    case ABSOLU:
+        return heuristic_abs(B);
+
+    case MOBILITE:
+        return heuristic_mob(B);
+
+    default:
+        return -1;
+    }
+}
+
+int AlphaBeta::heuristic_pos(const Board &B) const
 {
     int score = 0;
     for (int i = 0; i < B.getSize(); i++)
@@ -40,6 +60,24 @@ int AlphaBeta::heuristic(const Board &B) const
         }
     }
     return score;
+}
+
+int AlphaBeta::heuristic_abs(const Board &B) const
+{
+    // Care to the sign for the operation
+    if (this->player == Pawn::BLACK)
+    {
+        return B.getBlackScore() - B.getWhiteScore();
+    }
+    else
+    {
+        return B.getWhiteScore() - B.getBlackScore();
+    }
+}
+
+int AlphaBeta::heuristic_mob(const Board &B) const
+{
+    return 0;
 }
 
 std::vector<Board *> AlphaBeta::computeSubBoards(const Board &board) const
@@ -90,7 +128,7 @@ int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta,
         {
             int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
             maxEval = std::max(maxEval, eval);
-            if (beta <= alpha)
+            if (maxEval > beta)
             {
                 break;
             }
@@ -106,7 +144,7 @@ int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta,
         {
             int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
             minEval = std::min(minEval, eval);
-            if (beta <= alpha)
+            if (minEval < alpha)
             {
                 break;
             }
