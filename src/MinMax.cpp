@@ -40,6 +40,9 @@ int MinMax::heuristic(const Board &B) const
     case MOBILITE:
         return heuristic_mob(B);
 
+    case MIXTE:
+        return heuristic_mixte(B);
+
     default:
         return -1;
     }
@@ -77,7 +80,21 @@ int MinMax::heuristic_abs(const Board &B) const
 
 int MinMax::heuristic_mob(const Board &B) const
 {
-    return 0;
+    return this->heuristic_pos(B);
+}
+
+int MinMax::heuristic_mixte(const Board &B) const
+{
+    if (B.getMovesPlayed() < 25)
+    {
+        return this->heuristic_pos(B);
+    }
+    else if (B.getMovesPlayed() < 42)
+    {
+        return this->heuristic_mob(B);
+    }
+
+    return this->heuristic_abs(B);
 }
 
 std::vector<Board*> MinMax::computeSubBoards(const Board &board) const

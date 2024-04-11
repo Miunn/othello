@@ -68,6 +68,7 @@ Board::Board()
 
     blackScore = 2;
     whiteScore = 2;
+    moves_played = 0;
 }
 
 Board::Board(const Board& board)
@@ -83,6 +84,7 @@ Board::Board(const Board& board)
 
     this->blackScore = board.blackScore;
     this->whiteScore = board.whiteScore;
+    this->moves_played = board.moves_played;
 }
 
 /**
@@ -578,6 +580,11 @@ bool Board::isGameFinished() const
     return getValidMoves(Pawn::BLACK).size() == 0 && getValidMoves(Pawn::WHITE).size() == 0;
 }
 
+int Board::getMovesPlayed() const
+{
+    return this->moves_played;
+}
+
 bool Board::play(const std::string &coord)
 {
     int indexCoord = coordToIndex(coord);
@@ -599,5 +606,6 @@ bool Board::play(const std::string &coord)
     switchPawns(this->currentPlayer, indexCoord, moveDirection);
 
     this->togglePlayer();
+    this->moves_played++;
     return true;
 }

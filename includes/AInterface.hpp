@@ -9,6 +9,7 @@ typedef enum: unsigned short
   POSITIONNEL = 0,
   ABSOLU = 1,
   MOBILITE = 2,
+  MIXTE = 3
 } Strategy;
 
 /**

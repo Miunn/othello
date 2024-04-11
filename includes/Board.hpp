@@ -274,6 +274,13 @@ public:
     std::string indexToCoord(const int& index) const;
 
     /**
+     * @brief Get the amount of moves played
+     * 
+     * @return int Moves played amount
+     */
+    int getMovesPlayed() const;
+
+    /**
      * @brief Tells if the game is finished (No moves available for both players)
      * 
      * @return true If the game is finished
@@ -305,6 +312,12 @@ private:
      * 
      */
     int whiteScore;
+
+    /**
+     * @brief Amount of played moves
+     * 
+     */
+    int moves_played;
 
     /**
      * @brief Player turn
