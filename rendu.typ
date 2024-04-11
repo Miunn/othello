@@ -115,33 +115,49 @@ En premier lieu, la classe `Board` définie deux types d'énumérations :
 
 Le type Pawn servira à représenter un pion dans le reste des sources. Sa définition est :
 
-```cpp
-typedef enum : unsigned short
-{
-    EMPTY = 0,
-    WHITE = 1,
-    BLACK = 2,
-} Pawn;
-```
+#figure(
+  rect(
+    ```cpp
+    typedef enum : unsigned short
+    {
+        EMPTY = 0,
+        WHITE = 1,
+        BLACK = 2,
+    } Pawn;
+    ```,
+    inset: 10pt
+  ),
+  caption: "Enumération Pawn",
+  kind: figure,
+  supplement: "Figure"
+)
 
 === Type `Direction`
 
 Le type `Direction` représentera une direction dans les fonctions de vérification de validité des jeux et de placement des pions. Sa définition est :
 
-```cpp
-typedef enum : unsigned short
-{
-    NONE = 0,
-    TOP = 1,
-    RIGHT = 2,
-    BOTTOM = 4,
-    LEFT = 8,
-    DTR = 16,
-    DBR = 32,
-    DBL = 64,
-    DTL = 128,
-} Direction;
-```
+#figure(
+  rect(
+    ```cpp
+    typedef enum : unsigned short
+    {
+        NONE = 0,
+        TOP = 1,
+        RIGHT = 2,
+        BOTTOM = 4,
+        LEFT = 8,
+        DTR = 16,
+        DBR = 32,
+        DBL = 64,
+        DTL = 128,
+    } Direction;
+    ```,
+    inset: 10pt
+  ),
+  caption: "Enumération Direction",
+  kind: figure,
+  supplement: "Figure"
+)
 
 === Coeur de la classe
 
