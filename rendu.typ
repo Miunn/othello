@@ -1,3 +1,6 @@
+#import "@preview/lovelace:0.2.0": *
+#show: setup-lovelace
+
 #set document(
   title: [Algorithmes de jeu de plateau à deux joueurs],
   author: ("Boudadi Liam", "Caulier Rémi"),
@@ -251,6 +254,48 @@ La variable `payoff_matrix` correspond à la matrice des poids statistiques d'un
 
 
 == `AlphaBeta.hpp`
+
+L'algorithme AlphaBeta est une amélioration de l'algorithme MinMax. Il permet de réduire le nombre de nœuds explorés en élaguant les branches inutiles.
+
+Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
+
+#figure(
+  algorithm(
+    caption: [AlphaBeta],
+    pseudocode(
+      no-number,
+      [*entrées:* _nœud_ ; _profondeur_ ; alpha ; beta ; _joueurMax_],
+      no-number,
+      [*sortie:* valeur heuristique de _nœud_],
+      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
+        [*retourner* heuristique(_nœud_)], ded,
+      [*si* _joueurMax_ *alors*], ind,
+        [_valeur_ $ <- -infinity$],
+        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
+          [_valeur_ $<- $ max(_valeur_, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$, FAUX))],
+          [*si* valeur $>=$ $beta$ *alors*], ind,
+            [break], ded,
+            [_$alpha$_ $<- $ max($alpha$, _valeur_)],ded,
+        [*retourner* _valeur_],ded,
+      [*sinon*], ind,
+        [_valeur_ $<- +infinity$],
+        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
+          [_valeur_ $<- $ min(valeur, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$ , _VRAI_))],
+          [*si* _valeur_ $<=$ $alpha$ *alors*], ind,
+            [break], ded,
+            [_$beta$ $<- $ min($beta$,valeur_)],ded,
+      [*retourner* _valeur_],ded,
+      [],
+      [],
+      [*Premier appel* : alphabeta(_racine_, profondeur, -$infinity$, +$infinity$, VRAI)]
+  )
+),
+  supplement: "Figure",
+  kind: figure,
+  caption : [Algorithme AlphaBeta]
+)
+
+
 
 = Stratégies
 
