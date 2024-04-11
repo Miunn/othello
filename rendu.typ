@@ -248,6 +248,7 @@ L'algorithme choisit l'heuristique correspondant à la stratégie donnée en par
 
 == Mobilité
 
+
 = Utilisation du CLI
 
 Une fois compilé (cf. @architecture), le programme peut être lancé en ligne de commande de la façon suivante:
@@ -271,7 +272,7 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
   ],
   [`--benchmark MONTANT`],
   [
-    Le programme joue autant de parties que MONTANT lui indique.
+    Le programme joue autant de parties que `MONTANT` lui indique.
   ],
   [`--display-grid`],
   [
@@ -291,11 +292,21 @@ Comparaison des différentes stratégies et algorithmes mis en place.
 
 = Perspectives d'amélioration
 
-Threading
+== Threading
 
-Affinement des heuristiques
+Une première amélioration majeure à apporter est le threading de la recherche heuristique des algorithmes. En effet, de nos jours les ordinateurs possèdent de multiples coeurs et ne pas les utiliser nous prive d'une grande partie de la puissance de calcul disponible.
 
-Implémentation negamax et montecarlo
+Un premier threading efficace pourrai être la création d'un thread par branche initiale de l'arbre de recherche. De cette façon on divise au premier tour par 4 la durée d'exploration de l'algorithme, et plus encore en milieu de partie.
+
+== Affinement des heuristiques
+
+
+
+== Implémentation de nouveaux algorithmes
+
+Les algorithmes `minmax` et `alphabeta` sont des algorithmes déterministes, il est donc inutile d'y jouer plus d'une partie étant donné que ces dernières seront toutes identiques. Actuellement, le seul moyen de le départager reste de les faire jouer un nombre important de parties contre l'algorithme aléatoire et d'ensuite comparer les résultats.
+
+Pour améliorer ce processus l'optimal serait d'implémenter un algorithme non déterministe tel qu'un algorithme de Monte-Carlo. Celui-ci s'exécuterai en un temps déterministe (non infini et non aléatoire) mais dont le résultat contient une part d'aléatoire. De cette façon les parties contre un algorithme déterministe ne seront jamais identiques et il sera possible de départager ces dernier de façon plus intéressante qu'avec un algorithme complètement aléatoire.
 
 = Conclusion
 
