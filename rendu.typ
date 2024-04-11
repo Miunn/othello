@@ -8,6 +8,15 @@
   depth: 3,
 )
 
+#show ref: it => {
+  let el = it.element
+  if el != none and el.func() == heading {
+    el.body
+  } else {
+    it
+  }
+}
+
 #image("assets/insahdf.jpg", width: 40%)
 
 #align(center + horizon, text(17pt)[
@@ -47,7 +56,7 @@ Ce papier vient rendre compte du développement et de l'implémentation de diff�
 
 On détaillera par la suite l'implémentation du jeu en `C++`, les différentes classes et structures de données mises en place afin de communiquer avec les différentes intelligences artificielles. On présentera ensuite les intelligences qui ont pu être implémentées ainsi que les stratégies mises en place.
 
-== Architecture du projet
+== Architecture du projet <architecture>
 
 Le projet a été développé en C++, l'archive fournie contient donc les sources aux format `.cpp` dans le dossier `src` et les headers au format `.hpp` dans le dossier `includes`. Elle contient également un fichier `makefile` dans le but d'aider le lecteur à la compilation. Sinon cette dernière est possible de manière classique via `g++ src/*.cpp -o main -Iincludes`. Le dossier bin est utilisé pour stocker les fichiers objets lors de la compilation à l'aide de `makefile`.
 
@@ -239,6 +248,41 @@ L'algorithme choisit l'heuristique correspondant à la stratégie donnée en par
 
 == Mobilité
 
+= Utilisation du CLI
+
+Une fois compilé (cf. @architecture), le programme peut être lancé en ligne de commande de la façon suivante:
+
+#align(center)[
+  ```
+  othello BLACK WHITE [--benchmark MONTANT] [--display-grid] [--only-final]
+  ```
+]
+
+#table(
+  columns: (auto, auto),
+  inset: 10pt,
+  [BLACK],
+  [
+    Obligatoire. Interface jouant les pions noirs. Les valeurs possibles sont: `minmax`, `alphabeta`, `random` et `player`
+  ],
+  [WHITE],
+  [
+    Obligatoire. Interface jouant les pions blancs. Les valeurs possibles sont: `minmax`, `alphabeta`, `random` et `player`
+  ],
+  [`--benchmark MONTANT`],
+  [
+    Le programme joue autant de parties que MONTANT lui indique.
+  ],
+  [`--display-grid`],
+  [
+    Affiche les grilles de fin de partie pour la ou les parties jouées.
+  ],
+  [`--only-final`],
+  [
+    Affiche les résultats une fois que toutes les parties demandées ont été jouées. Remarque: Les accumulateurs statistiques sont uniquement affiché lorsque toutes les parties ont été jouées et non après chaque partie.
+  ]
+)
+
 = Statistiques
 
 Comparaison des différentes stratégies et algorithmes mis en place.
@@ -250,6 +294,8 @@ Comparaison des différentes stratégies et algorithmes mis en place.
 Threading
 
 Affinement des heuristiques
+
+Implémentation negamax et montecarlo
 
 = Conclusion
 
