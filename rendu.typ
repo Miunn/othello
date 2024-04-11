@@ -136,7 +136,7 @@ typedef enum : unsigned short
 
 === Coeur de la classe
 
-Le premier objectif de la classe `Board` est de sauvegarder l'état du plateau. Cette sauvegarde est effectuée dans un tableau à une dimension de type `Pawn`. Pour accéder à une case du tableau on effectuera donc l'opération : $op("ligne") * op("taille") + op("colonne")$, c'est le rôle de la fonction `coordToIndex(const std::string& coord) const;` qui prend en paramètre une coordonnée litérale (i.e. "b3") et qui la convertit en un index valide du tableau (i.e. "17").
+Le premier objectif de la classe `Board` est de sauvegarder l'état du plateau. Cette sauvegarde est effectuée dans un tableau à une dimension de type `Pawn`. Pour accéder à une case du tableau on effectuera donc l'opération : _ligne_ $*$ _taille_ $+$ _colonne_, c'est le rôle de la fonction `coordToIndex(const std::string& coord) const;` qui prend en paramètre une coordonnée litérale (i.e. "b3") et qui la convertit en un index valide du tableau (i.e. "17").
 
 La classe intègre également le joueur qui doit actuellement jouer (via le champ `Pawn currentPlayer`), cela permettra aux modèles IA d'effectuer les calculs (minimisation et maximisation par exemple) de manière cohérente avec le joueur courant étant donné qu'un même joueur peut jouer plusieurs fois à la suite.
 
@@ -246,6 +246,10 @@ Comparaison des différentes stratégies et algorithmes mis en place.
 = Problèmes rencontrés
 
 = Perspectives d'amélioration
+
+Threading
+
+Affinement des heuristiques
 
 = Conclusion
 
