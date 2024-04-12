@@ -10,6 +10,23 @@
   numbering: "I.1.a.",
   depth: 3,
 )
+#set page(numbering: "— 1 —")
+
+#show outline.entry: it => {
+  if it.at("label", default: none) == <custom-entry> {
+    it
+  } else {
+    [
+      #outline.entry(
+        it.level,
+        it.element,
+        it.body,
+        it.fill,
+        [#it.element.location().page()],
+      ) <custom-entry>
+    ]
+  }
+}
 
 #show ref: it => {
   let el = it.element
@@ -262,33 +279,32 @@ Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
 #figure(
   algorithm(
     caption: [AlphaBeta],
-    pseudocode(
-      no-number,
-      [*entrées:* _nœud_ ; _profondeur_ ; alpha ; beta ; _joueurMax_],
-      no-number,
-      [*sortie:* valeur heuristique de _nœud_],
-      [*si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*], ind,
-        [*retourner* heuristique(_nœud_)], ded,
-      [*si* _joueurMax_ *alors*], ind,
-        [_valeur_ $ <- -infinity$],
-        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
-          [_valeur_ $<- $ max(_valeur_, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$, FAUX))],
-          [*si* valeur $>=$ $beta$ *alors*], ind,
-            [break], ded,
-            [_$alpha$_ $<- $ max($alpha$, _valeur_)],ded,
-        [*retourner* _valeur_],ded,
-      [*sinon*], ind,
-        [_valeur_ $<- +infinity$],
-        [*pour chaque* _enfant_ de _nœud_ *faire*], ind,
-          [_valeur_ $<- $ min(valeur, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$ , _VRAI_))],
-          [*si* _valeur_ $<=$ $alpha$ *alors*], ind,
-            [break], ded,
-            [_$beta$ $<- $ min($beta$,valeur_)],ded,
-      [*retourner* _valeur_],ded,
-      [],
-      [],
-      [*Premier appel* : alphabeta(_racine_, profondeur, -$infinity$, +$infinity$, VRAI)]
-  )
+    pseudocode-list(
+      indentation-guide-stroke: stroke(thickness: .5pt),
+    )[
+      - *entrées:* _nœud_ ; _profondeur_ ; alpha ; beta ; _joueurMax_
+      - *sortie:* valeur heuristique de _nœud_
+      + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+        + *retourner* heuristique(_nœud_)
+      + *si* _joueurMax_ *alors*
+        + _valeur_ $ <- -infinity$
+        + *pour chaque* _enfant_ de _nœud_ *faire*,
+          + _valeur_ $<- $ max(_valeur_, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$, FAUX))
+          + *si* valeur $>=$ $beta$ *alors*
+            + break
+          + _$alpha$_ $<- $ max($alpha$, _valeur_)
+        + *retourner* _valeur_
+      + *sinon*
+        + _valeur_ $<- +infinity$
+        + *pour chaque* _enfant_ de _nœud_ *faire*
+          + _valeur_ $<- $ min(valeur, alphabeta(_enfant_, _profondeur$-1$_, $alpha$, $beta$ , _VRAI_))
+          + *si* _valeur_ $<=$ $alpha$ *alors*
+            + break
+          + _$beta$ $<- $ min($beta$,valeur_)
+        + *retourner* _valeur_
+
+      - *Premier appel* : alphabeta(_racine_, profondeur, -$infinity$, +$infinity$, VRAI)
+    ]
 ),
   supplement: "Figure",
   kind: figure,
@@ -420,9 +436,46 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
   ]
 )
 
+#pagebreak()
+
 = Statistiques
 
-Comparaison des différentes stratégies et algorithmes mis en place.
+Comparons les différents algorithmes alimentés des différentes stratégies.
+
+== Random - Random
+
+Dans un premier temps vérifions que l'affrontement entre 2 algorithmes complètement aléatoire tend vers 1 partie gagnée sur 2 pour chaque joueur.
+
+
+#figure(
+  rect(
+    ```
+    $ ./main random random --benchmark 1000 --only-final
+    Game 1000/1000
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:    442 (44.2%)
+    [BLANCS] Victoires:    518 (51.8%)
+    [******] Egalités:      40 (4%)
+    [EXEC  ] Temps moyen d'une partie: 0.887ms
+    ```
+  ),
+  caption: "Affrontement Random - Random sur 1000 parties",
+  kind: figure,
+  supplement: "Figure"
+)
+
+Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néamoins remarquer un avantage pour ces derniers en jouant de manière totalement aléatoire. On peut potentiellement expliquer cet avantage comme étant dû à l'ordre de jeu. En effet, jouant en deuxième, les blancs peuvent capturer le pion joué par les noirs aux premier tour, offrant potentiellement un avantage.
+
+== Minmax - Random
+
+=== Stratégie positionnelle
+
+=== Stratégie absolue
+
+=== Stratégie mobilité
+
+=== Stratégie mixte
 
 = Problèmes rencontrés
 
