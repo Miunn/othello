@@ -19,57 +19,14 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    AInterface *interface1;
-    AInterface *interface2;
-    if (((string) "player").compare(argv[1]) == 0)
-    {
-        interface1 = new Player(Pawn::BLACK);
-    }
-    else if (((string) "random").compare(argv[1]) == 0)
-    {
-        interface1 = new Random(Pawn::BLACK);
-    }
-    else if (((string) "minmax").compare(argv[1]) == 0)
-    {
-        interface1 = new MinMax(Pawn::BLACK, 3, Strategy::POSITIONNEL);
-    }
-    else if (((string) "alphabeta").compare(argv[1]) == 0)
-    {
-        interface1 = new AlphaBeta(Pawn::BLACK, 3, Strategy::POSITIONNEL);
-    }
-    else
-    {
-        cout << "[ERROR] Invalid player 1 argument" << endl;
-        return 0;
-    }
-
-    if (((string) "player").compare(argv[2]) == 0)
-    {
-        interface2 = new Player(Pawn::WHITE);
-    }
-    else if (((string) "random").compare(argv[2]) == 0)
-    {
-        interface2 = new Random(Pawn::WHITE);
-    }
-    else if (((string) "minmax").compare(argv[2]) == 0)
-    {
-        interface2 = new MinMax(Pawn::WHITE, 3, Strategy::POSITIONNEL);
-    }
-    else if (((string) "alphabeta").compare(argv[2]) == 0)
-    {
-        interface2 = new AlphaBeta(Pawn::WHITE, 3, Strategy::POSITIONNEL);
-    }
-    else
-    {
-        cout << "[ERROR] Invalid player 2 argument" << endl;
-        return 0;
-    }
-
     bool benchmark = false;
     int benchmarkAmount = 0;
     bool onlyFinal = false;
 
     bool displayGridResult = false;
+
+    int depth_black = 3;
+    int depth_white = 3;
 
     for (int i = 3; i < argc; i++)
     {
@@ -94,6 +51,74 @@ int main(int argc, char *argv[])
         {
             onlyFinal = true;
         }
+
+        if (((string) "--depth-black").compare(argv[i]) == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                cout << "[ERROR] Missing depth black param" << endl;
+                return 0;
+            }
+
+            depth_black = atoi(argv[i + 1]);
+        }
+
+        if (((string) "--depth-white").compare(argv[i]) == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                cout << "[ERROR] Missing depth white param" << endl;
+                return 0;
+            }
+
+            depth_white = atoi(argv[i + 1]);
+        }
+    }
+
+    AInterface *interface1;
+    AInterface *interface2;
+    if (((string) "player").compare(argv[1]) == 0)
+    {
+        interface1 = new Player(Pawn::BLACK);
+    }
+    else if (((string) "random").compare(argv[1]) == 0)
+    {
+        interface1 = new Random(Pawn::BLACK);
+    }
+    else if (((string) "minmax").compare(argv[1]) == 0)
+    {
+        interface1 = new MinMax(Pawn::BLACK, depth_black, Strategy::POSITIONNEL);
+    }
+    else if (((string) "alphabeta").compare(argv[1]) == 0)
+    {
+        interface1 = new AlphaBeta(Pawn::BLACK, depth_black, Strategy::POSITIONNEL);
+    }
+    else
+    {
+        cout << "[ERROR] Invalid player 1 argument" << endl;
+        return 0;
+    }
+
+    if (((string) "player").compare(argv[2]) == 0)
+    {
+        interface2 = new Player(Pawn::WHITE);
+    }
+    else if (((string) "random").compare(argv[2]) == 0)
+    {
+        interface2 = new Random(Pawn::WHITE);
+    }
+    else if (((string) "minmax").compare(argv[2]) == 0)
+    {
+        interface2 = new MinMax(Pawn::WHITE, depth_white, Strategy::POSITIONNEL);
+    }
+    else if (((string) "alphabeta").compare(argv[2]) == 0)
+    {
+        interface2 = new AlphaBeta(Pawn::WHITE, depth_white, Strategy::POSITIONNEL);
+    }
+    else
+    {
+        cout << "[ERROR] Invalid player 2 argument" << endl;
+        return 0;
     }
 
     if (benchmark)

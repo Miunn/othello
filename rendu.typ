@@ -63,12 +63,14 @@
   indent: true
 )
 
+#pagebreak(weak: true)
+
 #outline(
   title: [Liste des figures],
   target: figure.where(kind: figure),
 )
 
-#pagebreak()
+#pagebreak(weak: true)
 
 = Introduction
 
@@ -438,7 +440,7 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
 
 #pagebreak()
 
-= Statistiques
+= Statistiques et Critiques
 
 Comparons les différents algorithmes alimentés des différentes stratégies.
 
