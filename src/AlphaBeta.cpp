@@ -109,8 +109,6 @@ std::string AlphaBeta::play(const Board &board) const
             best_move = moves.at(i);
         }
     }
-    std::cout << "AlphaBeta suggest: " << best_move << std::endl;
-
     return best_move;
 }
 
