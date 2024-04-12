@@ -305,10 +305,85 @@ L'algorithme choisit l'heuristique correspondant à la stratégie donnée en par
 
 == Positionnelle
 
+L'heuristique positionnelle calcule le score du noeud en se basant sur la matrice de récompense vu en @payoff_matrix. Le code est le suivant :
+
+#figure(
+  rect(
+    ```cpp
+    int MinMax::heuristic_pos(const Board &B) const
+    {
+        int score = 0;
+        for (int i = 0; i < B.getSize(); i++)
+        {
+            for (int j = 0; j < B.getSize(); j++)
+            {
+                int c = i * B.getSize() + j;
+                if (B.getCoord(c) == this->player)
+                {
+                    score += this->payoff_matrix[c];
+                }
+            }
+        }
+        return score;
+    }
+    ```,
+    inset: 10pt
+  ),
+  caption: "Calcul heuristique positionnel",
+  kind: figure,
+  supplement: "Figure",
+)
+
 == Absolue
+
+La stratégie absolue attribue une valeur au noeud en fonction du score du joueur. Le score étant représenté par le nombre de pions du joueurs correspondant, le code de l'heuristique est assez simple. Néanmoins on fera attention a la subtilité en fonction du joueur joué par l'algorithme pour ne pas avoir une valeur de noeud négative :
+
+#figure(
+  rect(
+    ```cpp
+    int MinMax::heuristic_abs(const Board &B) const
+    {
+        // Care to the sign for the operation
+        if (this->player == Pawn::BLACK)
+        {
+            return B.getBlackScore() - B.getWhiteScore();
+        }
+        else
+        {
+            return B.getWhiteScore() - B.getBlackScore();
+        }
+    }
+    ```
+  ),
+  caption: "Calcul heuristique absolu",
+  kind: figure,
+  supplement: "Figure"
+)
 
 == Mobilité
 
+L'heuristique mobilité se sert du dernier pion placé pour prioriser les déplacements dans les coins du plateau en se basant sur la matrice de récompense pour retourner le score scorrespondant.
+
+Si le déplacement n'est pas joué dans un coin alors la valeur est le nombre de déplacement possible.
+
+#figure(
+  rect(
+    ```cpp
+    int MinMax::heuristic_mob(const Board &B, std::string move) const
+    {
+        if (this->payoff_matrix[B.coordToIndex(move)] > 400)
+        {
+            return this->payoff_matrix[B.coordToIndex(move)];
+        }
+
+        return B.getValidMoves(B.getCurrentPlayer()).size();
+    }
+    ```
+  ),
+  caption: "Calcul heuristique mobilité",
+  kind: figure,
+  supplement: "Figure"
+)
 
 = Utilisation du CLI
 
