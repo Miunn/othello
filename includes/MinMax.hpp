@@ -15,7 +15,7 @@ public:
      * @param board Game board
      * @return int Computed node value
      */
-    int heuristic(const Board &board) const;
+    int heuristic(const Board &board, std::string move) const;
 
     /**
      * @brief Get node value for a positionnal strategy (func. called by heuristic)
@@ -37,9 +37,10 @@ public:
      * @brief Get node value for a mobility strategy (func. called by heuristic)
      * 
      * @param board Game board
+     * @param move Moved played to get this board
      * @return int Computed node value
      */
-    int heuristic_mob(const Board &board) const;
+    int heuristic_mob(const Board &board, std::string move) const;
 
     /**
      * @brief Get node value for a mixed strategy (func. called by heuristic)
@@ -47,9 +48,9 @@ public:
      * @param board Game board
      * @return int Computed node value
      */
-    int heuristic_mixte(const Board &board) const;
+    int heuristic_mixte(const Board &board, std::string move) const;
 
-    int play_research(const Board &board, int depth, Pawn maxPawn) const;
+    int play_research(const Board &board, std::string move, int depth, Pawn maxPawn) const;
     std::vector<Board*> computeSubBoards(const Board &board) const;
     std::string play(const Board &board) const override;
 

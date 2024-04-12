@@ -27,7 +27,7 @@ MinMax::MinMax(Pawn player, int depth, Strategy strategy)
     this->strategy = strategy;
 }
 
-int MinMax::heuristic(const Board &B) const
+int MinMax::heuristic(const Board &B, std::string move) const
 {
     switch (this->strategy)
     {
@@ -38,10 +38,10 @@ int MinMax::heuristic(const Board &B) const
         return heuristic_abs(B);
 
     case MOBILITE:
-        return heuristic_mob(B);
+        return heuristic_mob(B, move);
 
     case MIXTE:
-        return heuristic_mixte(B);
+        return heuristic_mixte(B, move);
 
     default:
         return -1;
@@ -78,12 +78,17 @@ int MinMax::heuristic_abs(const Board &B) const
     }
 }
 
-int MinMax::heuristic_mob(const Board &B) const
+int MinMax::heuristic_mob(const Board &B, std::string move) const
 {
-    return this->heuristic_pos(B);
+    if (this->payoff_matrix[B.coordToIndex(move)] > 400)
+    {
+        return this->payoff_matrix[B.coordToIndex(move)];
+    }
+
+    return B.getValidMoves(B.getCurrentPlayer()).size();
 }
 
-int MinMax::heuristic_mixte(const Board &B) const
+int MinMax::heuristic_mixte(const Board &B, std::string move) const
 {
     if (B.getMovesPlayed() < 25)
     {
@@ -91,7 +96,7 @@ int MinMax::heuristic_mixte(const Board &B) const
     }
     else if (B.getMovesPlayed() < 42)
     {
-        return this->heuristic_mob(B);
+        return this->heuristic_mob(B, move);
     }
 
     return this->heuristic_abs(B);
@@ -118,7 +123,7 @@ std::string MinMax::play(const Board &board) const
     {
         Board *copy_board = new Board(board);
         copy_board->play(moves[i]);
-        scores.push_back(play_research(*copy_board, 1, board.getCurrentPlayer()));
+        scores.push_back(play_research(*copy_board, moves.at(i), 1, board.getCurrentPlayer()));
         copy_board->~Board();
     }
 
@@ -134,15 +139,23 @@ std::string MinMax::play(const Board &board) const
     return moves.at(max_index);
 }
 
-int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
+int MinMax::play_research(const Board &board, std::string move, int depth, Pawn maxPawn) const
 {
     if (this->depth == depth)
     {
-        return this->heuristic(board);
+        return this->heuristic(board, move);
     }
 
 
     std::vector<Board*> sub_boards;
+    std::vector<std::string> moves = board.getValidMoves(board.getCurrentPlayer());
+    for (int j = 0; j < (int)moves.size(); j++)
+    {
+        Board *copy_board = new Board(board);
+        copy_board->play(moves.at(j));
+        sub_boards.push_back(copy_board);
+    }
+
     sub_boards = this->computeSubBoards(board);
 
     
@@ -161,7 +174,7 @@ int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
     }
     else if (sub_boards.size() == 0 && board.getBlackScore() == board.getWhiteScore())
     {
-        return this->heuristic(board);
+        return this->heuristic(board, move);
     }
     else if (sub_boards.size() == 0)
     {
@@ -172,7 +185,7 @@ int MinMax::play_research(const Board &board, int depth, Pawn maxPawn) const
 
     for (int i = 0; i < (int)sub_boards.size(); i++)
     {
-        scores.push_back(this->play_research(*sub_boards.at(i), depth+1, maxPawn));
+        scores.push_back(this->play_research(*sub_boards.at(i), moves.at(i), depth+1, maxPawn));
     }
 
     if (board.getCurrentPlayer() == maxPawn)
