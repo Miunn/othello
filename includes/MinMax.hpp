@@ -51,7 +51,6 @@ public:
     int heuristic_mixte(const Board &board, std::string move) const;
 
     int play_research(const Board &board, std::string move, int depth, Pawn maxPawn) const;
-    std::vector<Board*> computeSubBoards(const Board &board) const;
     std::string play(const Board &board) const override;
 
 private:

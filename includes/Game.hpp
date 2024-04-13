@@ -65,7 +65,21 @@ class Game
      * @param displayGrid Tells if the function should display the finished board
      * @return Pawn Winner pawn
      */
-    Pawn analyseGame(bool verbose, bool displayGrid) const;
+    Pawn analyseGame(bool verbose, bool displayGrid);
+
+    /**
+     * @brief Get black dominance score
+     * 
+     * @return double 
+     */
+    double getBlackOcc() const;
+
+    /**
+     * @brief Get white dominance score
+     * 
+     * @return double 
+     */
+    double getWhiteOcc() const;
 
     private:
 
@@ -80,6 +94,18 @@ class Game
      * 
      */
     bool runningGame;
+
+    /**
+     * @brief Black pawns dominance
+     * 
+     */
+    double occ_black;
+
+    /**
+     * @brief White pawns dominance
+     * 
+     */
+    double occ_white;
 };
 
 #endif

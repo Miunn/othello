@@ -10,7 +10,16 @@
   numbering: "I.1.a.",
   depth: 3,
 )
-#set page(numbering: "— 1 —")
+#set page(
+  footer: locate(
+      loc => {
+        let page-number = counter(page).at(loc).first()
+        let match-list = query(selector(<turn-on-page-numbering>).before(loc), loc)
+        if match-list == () { return none }
+        align(center, "— " + str(page-number) + " —")
+      },
+    ),
+)
 
 #show outline.entry: it => {
   if it.at("label", default: none) == <custom-entry> {
@@ -59,7 +68,7 @@
 
 #outline(
   title: [Table des matières],
-  depth: 3,
+  depth: 2,
   indent: true
 )
 
@@ -72,7 +81,7 @@
 
 #pagebreak(weak: true)
 
-= Introduction
+= Introduction <turn-on-page-numbering>
 
 Ce papier vient rendre compte du développement et de l'implémentation de différents algorithmes dans le but de jouer au jeu de plateau d'Othello.
 
@@ -270,11 +279,44 @@ La variable `payoff_matrix` correspond à la matrice des poids statistiques d'un
 
 == `Minmax.hpp`
 
+L'algorithme MinMax, maximise et minimise successivement ses coups et les coups de l'adversaire. Pour le jeu d'Othello il est néanmoins nécessaire de vérifier le joueur courrant étant donné qu'un même joueur peut jouer plusieurs fois successivement.
 
+Le pseudo code de l'algorithme implémenté est le suivant :
+
+#figure(
+  algorithm(
+    caption: [MinMax],
+    pseudocode-list(
+      indentation-guide-stroke: stroke(thickness: .5pt),
+    )[
+      - *entrées:* _nœud_ ; _profondeur_ ; _coup_ ; _joueurMax_
+      - *sortie:* valeur heuristique de _nœud_
+      + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
+        + *retourner* heuristique(_nœud_)
+      + *si* _joueurMax_ *alors*
+        + _valeur_ $<- -oo$
+        + *pour chaque* _coup_ possible de _nœud_ *faire*,
+          + _enfant_ $<- $ joue(_coup_, _noeud_)
+          + _valeur_ $<- $ max(_valeur_, minmax(_enfant_, _profondeur$-1$_, _coup_, FAUX))
+          + *retourner* _valeur_
+      + *sinon*
+        + _valeur_ $<- +infinity$
+        + *pour chaque* _coup_ possible de _nœud_ *faire*
+          + _enfant_ $<- $ joue(_coup_, _noeud_)
+          + _valeur_ $<- $ min(_valeur_, minmax(_enfant_, _profondeur$-1$_, _coup_, VRAI))
+        + *retourner* _valeur_
+    ]
+),
+  supplement: "Figure",
+  kind: figure,
+  caption : [Algorithme AlphaBeta]
+)
+
+#pagebreak(weak: true)
 
 == `AlphaBeta.hpp`
 
-L'algorithme AlphaBeta est une amélioration de l'algorithme MinMax. Il permet de réduire le nombre de nœuds explorés en élaguant les branches inutiles.
+L'algorithme AlphaBeta est une amélioration de l'algorithme MinMax. Il permet de réduire le nombre de nœuds explorés en élaguant les branches inutiles. Cette amélioration de l'algorithme précédent permet donc d'améliorer le temps d'exécution et de recherche.
 
 Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
 
@@ -284,7 +326,7 @@ Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
     pseudocode-list(
       indentation-guide-stroke: stroke(thickness: .5pt),
     )[
-      - *entrées:* _nœud_ ; _profondeur_ ; alpha ; beta ; _joueurMax_
+      - *entrées:* _nœud_ ; _profondeur_ ; $alpha$ ; $beta$ ; _joueurMax_
       - *sortie:* valeur heuristique de _nœud_
       + *si* _profondeur_ $= 0$ *ou* _nœud_ est terminal *alors*
         + *retourner* heuristique(_nœud_)
@@ -409,7 +451,7 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
 
 #align(center)[
   ```
-  othello BLACK WHITE [--benchmark MONTANT] [--display-grid] [--only-final]
+  othello BLACK WHITE [--depth-black PROFONDEUR] [--depth-white PROFONDEUR] [--benchmark MONTANT] [--display-grid] [--only-final]
   ```
 ]
 
@@ -423,6 +465,14 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
   [WHITE],
   [
     Obligatoire. Interface jouant les pions blancs. Les valeurs possibles sont: `minmax`, `alphabeta`, `random` et `player`
+  ],
+  [`--depth-black PROFONDEUR`],
+  [
+    Profondeur personalisée pour l'algorithme jouant les pions noirs. Par défaut à 3, ignoré pour `player` et `random`.
+  ],
+  [`--depth-white PROFONDEUR`],
+  [
+    Profondeur personalisée pour l'algorithme jouant les pions blancs. Par défaut à 3, ignoré pour `player` et `random`.
   ],
   [`--benchmark MONTANT`],
   [
@@ -448,7 +498,6 @@ Comparons les différents algorithmes alimentés des différentes stratégies.
 
 Dans un premier temps vérifions que l'affrontement entre 2 algorithmes complètement aléatoire tend vers 1 partie gagnée sur 2 pour chaque joueur.
 
-
 #figure(
   rect(
     ```
@@ -460,6 +509,8 @@ Dans un premier temps vérifions que l'affrontement entre 2 algorithmes complèt
     [BLANCS] Victoires:    518 (51.8%)
     [******] Egalités:      40 (4%)
     [EXEC  ] Temps moyen d'une partie: 0.887ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  49%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 50%
     ```
   ),
   caption: "Affrontement Random - Random sur 1000 parties",
@@ -467,19 +518,168 @@ Dans un premier temps vérifions que l'affrontement entre 2 algorithmes complèt
   supplement: "Figure"
 )
 
-Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néamoins remarquer un avantage pour ces derniers en jouant de manière totalement aléatoire. On peut potentiellement expliquer cet avantage comme étant dû à l'ordre de jeu. En effet, jouant en deuxième, les blancs peuvent capturer le pion joué par les noirs aux premier tour, offrant potentiellement un avantage.
+Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néamoins remarquer un avantage pour ces derniers en jouant de manière totalement aléatoire. On peut potentiellement expliquer cet avantage comme étant dû à l'ordre de jeu. En effet, jouant en deuxième, les blancs peuvent capturer le pion joué par les noirs aux premier tour, offrant un potentiel un avantage.
 
 == Minmax - Random
 
+Ci-dessous sont détaillés différents résultats impliquant l'algorithme MinMax contre un algorithme complètement aléatoire.
+
+Les tests présentés ont tous été effectuée sur 50 parties avec une profondeur de recherche de 5 coups.
+
 === Stratégie positionnelle
+
+#figure(
+  rect(
+    ```
+    $ ./main minmax random --depth-white 5 --strategy-white pos
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:     49 (98%)
+      [BLANCS] Victoires:      1 (2%)
+      [******] Egalités:       0 (0%)
+      [EXEC  ] Temps moyen d'une partie: 16841.1ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  66%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement MinMax - Random sur 50 parties"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main random minmax --depth-white 5 --strategy-white pos
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:      2 (4%)
+      [BLANCS] Victoires:     48 (96%)
+      [******] Egalités:       0 (0%)
+      [EXEC  ] Temps moyen d'une partie: 13651ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 63%
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - MinMax sur 50 parties"
+)
 
 === Stratégie absolue
 
+#figure(
+  rect(
+    ```
+    $ ./main minmax random --depth-white 5 --strategy-white abs
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:     43 (86%)
+      [BLANCS] Victoires:      7 (14%)
+      [******] Egalités:       0 (0%)
+      [EXEC  ] Temps moyen d'une partie: 7583.37ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  59%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 27%
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement MinMax - Random sur 50 parties"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main random minmax --depth-white 5 --strategy-white abs
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:      5 (10%)
+      [BLANCS] Victoires:     44 (88%)
+      [******] Egalités:       1 (2%)
+      [EXEC  ] Temps moyen d'une partie: 14086.5ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 62%
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - MinMax sur 50 parties"
+)
+
 === Stratégie mobilité
+
+#figure(
+  rect(
+    ```
+    $ ./main minmax random --depth-white 5 --strategy-white mob
+      --benchmark 50 --only-final
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement MinMax - Random sur 50 parties"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main random minmax --depth-white 5 --strategy-white mob
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:      3 (6%)
+      [BLANCS] Victoires:     45 (90%)
+      [******] Egalités:       2 (4%)
+      [EXEC  ] Temps moyen d'une partie: 13721.5ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  37%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - MinMax sur 50 parties"
+)
 
 === Stratégie mixte
 
+#figure(
+  rect(
+    ```
+    $ ./main minmax random --depth-white 5 --strategy-white mixte
+      --benchmark 50 --only-final
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement MinMax - Random sur 50 parties"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main random minmax --depth-white 5 --strategy-white mixte
+      --benchmark 50 --only-final
+    ```,
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - MinMax sur 50 parties"
+)
+
+== AlphaBeta - Random
+
 = Problèmes rencontrés
+
+Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
 
 = Perspectives d'amélioration
 
@@ -487,11 +687,15 @@ Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néam
 
 Une première amélioration majeure à apporter est le threading de la recherche heuristique des algorithmes. En effet, de nos jours les ordinateurs possèdent de multiples coeurs et ne pas les utiliser nous prive d'une grande partie de la puissance de calcul disponible.
 
-Un premier threading efficace pourrai être la création d'un thread par branche initiale de l'arbre de recherche. De cette façon on divise au premier tour par 4 la durée d'exploration de l'algorithme, et plus encore en milieu de partie.
+Un premier threading efficace pourrai être la création d'un thread par branche initiale de l'arbre de recherche. De cette façon on divise au premier tour par 4 la durée d'exploration de l'algorithme, et plus encore en milieu de partie. Cette amélioration permettrait également d'augmenter considérablement la profondeur de recherche.
 
 == Affinement des heuristiques
 
+== Pré-calcul de l'arbre de recherche
 
+Afin d'optimiser davantage le temps de calcul et les performances du programme, un pré-calcul des noeuds et des coups à jouer en fonction pourrait être effectué moyennant un compromis sur le stockage de ces données.
+
+Ce pré-calcul indiquerait pour tel noeud courrant le cuop optimal à jouer de manière immédiate sans calcul supplémentaire. Il pourrait être effectué sur les noeuds de début et de fin de partie, instants dans lesquels l'arbre de recherche se réduit.
 
 == Implémentation de nouveaux algorithmes
 

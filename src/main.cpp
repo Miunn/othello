@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
     int depth_black = 3;
     int depth_white = 3;
 
+    Strategy black_strategy = Strategy::POSITIONNEL;
+    Strategy white_strategy = Strategy::POSITIONNEL;
+
     for (int i = 3; i < argc; i++)
     {
         if (((string) "--benchmark").compare(argv[i]) == 0)
@@ -73,6 +76,58 @@ int main(int argc, char *argv[])
 
             depth_white = atoi(argv[i + 1]);
         }
+
+        if (((string) "--strategy-black").compare(argv[i]) == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                cout << "[ERROR] Missing black strategy param" << endl;
+                return 0;
+            }
+
+            if (((string) "pos").compare(argv[i + 1]) == 0)
+            {
+                black_strategy = Strategy::POSITIONNEL;
+            }
+            else if (((string) "abs").compare(argv[i + 1]) == 0)
+            {
+                black_strategy = Strategy::ABSOLU;
+            }
+            else if (((string) "mob").compare(argv[i + 1]) == 0)
+            {
+                black_strategy = Strategy::MOBILITE;
+            }
+            else if (((string) "mixte").compare(argv[i + 1]) == 0)
+            {
+                black_strategy = Strategy::MIXTE;
+            }
+        }
+
+        if (((string) "--strategy-white").compare(argv[i]) == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                cout << "[ERROR] Missing black strategy param" << endl;
+                return 0;
+            }
+
+            if (((string) "pos").compare(argv[i + 1]) == 0)
+            {
+                white_strategy = Strategy::POSITIONNEL;
+            }
+            else if (((string) "abs").compare(argv[i + 1]) == 0)
+            {
+                white_strategy = Strategy::ABSOLU;
+            }
+            else if (((string) "mob").compare(argv[i + 1]) == 0)
+            {
+                white_strategy = Strategy::MOBILITE;
+            }
+            else if (((string) "mixte").compare(argv[i + 1]) == 0)
+            {
+                white_strategy = Strategy::MIXTE;
+            }
+        }
     }
 
     AInterface *interface1;
@@ -87,11 +142,11 @@ int main(int argc, char *argv[])
     }
     else if (((string) "minmax").compare(argv[1]) == 0)
     {
-        interface1 = new MinMax(Pawn::BLACK, depth_black, Strategy::POSITIONNEL);
+        interface1 = new MinMax(Pawn::BLACK, depth_black, black_strategy);
     }
     else if (((string) "alphabeta").compare(argv[1]) == 0)
     {
-        interface1 = new AlphaBeta(Pawn::BLACK, depth_black, Strategy::POSITIONNEL);
+        interface1 = new AlphaBeta(Pawn::BLACK, depth_black, black_strategy);
     }
     else
     {
@@ -109,11 +164,11 @@ int main(int argc, char *argv[])
     }
     else if (((string) "minmax").compare(argv[2]) == 0)
     {
-        interface2 = new MinMax(Pawn::WHITE, depth_white, Strategy::POSITIONNEL);
+        interface2 = new MinMax(Pawn::WHITE, depth_white, white_strategy);
     }
     else if (((string) "alphabeta").compare(argv[2]) == 0)
     {
-        interface2 = new AlphaBeta(Pawn::WHITE, depth_white, Strategy::POSITIONNEL);
+        interface2 = new AlphaBeta(Pawn::WHITE, depth_white, white_strategy);
     }
     else
     {
@@ -127,12 +182,15 @@ int main(int argc, char *argv[])
         int whiteWons = 0;
         int draws = 0;
         unsigned long int gameDurations = 0;
+        double blackDominance = 0.0;
+        double whiteDominance = 0.0;
+
         for (int i = 0; i < benchmarkAmount; i++)
         {
-            Game game;
+            Game *game = new Game();
 
             auto t1 = chrono::high_resolution_clock::now();
-            game.startGame(*interface1, *interface2);
+            game->startGame(*interface1, *interface2);
             auto t2 = chrono::high_resolution_clock::now();
             gameDurations += chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
             
@@ -145,7 +203,9 @@ int main(int argc, char *argv[])
                 cout << "\rGame " << i+1 << "/" << benchmarkAmount << std::flush;
             }
 
-            Pawn winner = game.analyseGame(!onlyFinal, displayGridResult);
+            Pawn winner = game->analyseGame(!onlyFinal, displayGridResult);
+            blackDominance += game->getBlackOcc();
+            whiteDominance += game->getWhiteOcc();
 
             if (winner == Pawn::BLACK)
             {
@@ -159,6 +219,8 @@ int main(int argc, char *argv[])
             {
                 draws++;
             }
+            
+            delete game;
         }
 
         cout << "\n\n====== Résultats ======" << endl;
@@ -166,6 +228,8 @@ int main(int argc, char *argv[])
         cout << "[BLANCS] Victoires: " << setw(6) << whiteWons << " (" << whiteWons/(double)benchmarkAmount*100 << "%)"  << endl;
         cout << "[******] Egalités: " << setw(7) << draws << " (" << draws/(double)benchmarkAmount*100 << "%)"  << endl;
         cout << "[EXEC  ] Temps moyen d'une partie: " << gameDurations / benchmarkAmount / 1000.0 << "ms" << endl;
+        cout << "[EXEC  ] Occupation du terrain en moyenne par les noirs:  " << int(blackDominance / (double)benchmarkAmount) << "%" << endl;
+        cout << "[EXEC  ] Occupation du terrain en moyenne par les blancs: " << int(whiteDominance / (double)benchmarkAmount) << "%" << endl;
     }
     else
     {

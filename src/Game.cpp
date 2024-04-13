@@ -8,17 +8,25 @@
 
 Game::Game()
 {
-    this->b = new Board;
+    this->b = new Board();
     this->runningGame = false;
+
+    this->occ_black = 0;
+    this->occ_white = 0;
 }
 
 Game::Game(Board *b, Pawn player)
 {
     this->b = b;
+    this->runningGame = false;
+
+    this->occ_black = 0;
+    this->occ_white = 0;
 }
 
 Game::~Game()
 {
+    delete this->b;
 }
 
 Board *Game::getBoard() const
@@ -101,7 +109,7 @@ void Game::startGame(const AInterface &blackPlayer, const AInterface &whitePlaye
     } while (runningGame && !b->isGameFinished() && playedCoord != "");
 }
 
-Pawn Game::analyseGame(bool verbose, bool displayGrid) const
+Pawn Game::analyseGame(bool verbose, bool displayGrid)
 {
     if (!this->b->isGameFinished())
     {
@@ -122,6 +130,9 @@ Pawn Game::analyseGame(bool verbose, bool displayGrid) const
     {
         winner = Pawn::EMPTY;
     }
+
+    this->occ_black = 100 * ((double)b->getBlackScore() / (double)b->getSize() / (double)b->getSize());
+    this->occ_white = 100 * ((double)b->getWhiteScore() / (double)b->getSize() / (double)b->getSize());
 
     if (!verbose)
     {
@@ -155,4 +166,14 @@ Pawn Game::analyseGame(bool verbose, bool displayGrid) const
                   << *this->b << std::endl;
     }
     return winner;
+}
+
+double Game::getBlackOcc() const
+{
+    return this->occ_black;
+}
+
+double Game::getWhiteOcc() const
+{
+    return this->occ_white;
 }

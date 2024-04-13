@@ -102,19 +102,6 @@ int MinMax::heuristic_mixte(const Board &B, std::string move) const
     return this->heuristic_abs(B);
 }
 
-std::vector<Board*> MinMax::computeSubBoards(const Board &board) const
-{
-    std::vector<Board*> depth_boards = {};
-    std::vector<std::string> moves = board.getValidMoves(board.getCurrentPlayer());
-    for (int j = 0; j < (int)moves.size(); j++)
-    {
-        Board *copy_board = new Board(board);
-        copy_board->play(moves.at(j));
-        depth_boards.push_back(copy_board);
-    }
-    return depth_boards;
-}
-
 std::string MinMax::play(const Board &board) const
 {
     std::vector<std::string> moves = board.getValidMoves(this->player);
@@ -124,7 +111,7 @@ std::string MinMax::play(const Board &board) const
         Board *copy_board = new Board(board);
         copy_board->play(moves[i]);
         scores.push_back(play_research(*copy_board, moves.at(i), 1, board.getCurrentPlayer()));
-        copy_board->~Board();
+        delete copy_board;
     }
 
     int max_index = 0;
@@ -155,9 +142,6 @@ int MinMax::play_research(const Board &board, std::string move, int depth, Pawn 
         copy_board->play(moves.at(j));
         sub_boards.push_back(copy_board);
     }
-
-    sub_boards = this->computeSubBoards(board);
-
     
     // Pas de sous-plateau, on a donc une partie terminée
     // Soit gagnée, soit perdue
@@ -186,6 +170,7 @@ int MinMax::play_research(const Board &board, std::string move, int depth, Pawn 
     for (int i = 0; i < (int)sub_boards.size(); i++)
     {
         scores.push_back(this->play_research(*sub_boards.at(i), moves.at(i), depth+1, maxPawn));
+        delete sub_boards.at(i);
     }
 
     if (board.getCurrentPlayer() == maxPawn)
