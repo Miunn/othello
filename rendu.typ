@@ -91,7 +91,7 @@ On détaillera par la suite l'implémentation du jeu en `C++`, les différentes 
 
 Le projet a été développé en C++, l'archive fournie contient donc les sources aux format `.cpp` dans le dossier `src` et les headers au format `.hpp` dans le dossier `includes`. Elle contient également un fichier `makefile` dans le but d'aider le lecteur à la compilation. Sinon cette dernière est possible de manière classique via `g++ src/*.cpp -o main -Iincludes`. Le dossier bin est utilisé pour stocker les fichiers objets lors de la compilation à l'aide de `makefile`.
 
-L'architecture complète est la suivante :
+L'architecture complète est celle présentée en @architecture_projet
 
 #figure(
   rect(
@@ -142,9 +142,11 @@ En premier lieu, la classe `Board` définie deux types d'énumérations :
 - Le type `Pawn`
 - Le type `Direction`
 
+Elle permet également de calculer différentes informations sur le plateau tel que les coups valides pour un joueur donné, leurs scores mais contient également les fonctions permettant de jouer un coup en vérifiant que celui-ci est valide et en retournant les pions à capturer.
+
 === Type `Pawn`
 
-Le type Pawn servira à représenter un pion dans le reste des sources. Sa définition est :
+Le type Pawn servira à représenter un pion dans le reste des sources. Sa définition est reprise en @enum_pion.
 
 #figure(
   rect(
@@ -161,11 +163,11 @@ Le type Pawn servira à représenter un pion dans le reste des sources. Sa défi
   caption: "Enumération Pawn",
   kind: figure,
   supplement: "Figure"
-)
+) <enum_pion>
 
 === Type `Direction`
 
-Le type `Direction` représentera une direction dans les fonctions de vérification de validité des jeux et de placement des pions. Sa définition est :
+Le type `Direction` représentera une direction dans les fonctions de vérification de validité des jeux et de placement des pions. Sa définition est indiquée en @enum_dir.
 
 #figure(
   rect(
@@ -188,7 +190,7 @@ Le type `Direction` représentera une direction dans les fonctions de vérificat
   caption: "Enumération Direction",
   kind: figure,
   supplement: "Figure"
-)
+) <enum_dir>
 
 === Coeur de la classe
 
@@ -281,11 +283,9 @@ La variable `payoff_matrix` correspond à la matrice des poids statistiques d'un
 
 L'algorithme MinMax, maximise et minimise successivement ses coups et les coups de l'adversaire. Pour le jeu d'Othello il est néanmoins nécessaire de vérifier le joueur courrant étant donné qu'un même joueur peut jouer plusieurs fois successivement.
 
-Le pseudo code de l'algorithme implémenté est le suivant :
+Le pseudo code de l'algorithme implémenté est celui de l'@algo_minmax
 
-#figure(
-  algorithm(
-    caption: [MinMax],
+#algorithm(
     pseudocode-list(
       indentation-guide-stroke: stroke(thickness: .5pt),
     )[
@@ -305,12 +305,10 @@ Le pseudo code de l'algorithme implémenté est le suivant :
           + _enfant_ $<- $ joue(_coup_, _noeud_)
           + _valeur_ $<- $ min(_valeur_, minmax(_enfant_, _profondeur$-1$_, _coup_, VRAI))
         + *retourner* _valeur_
-    ]
-),
-  supplement: "Figure",
-  kind: figure,
-  caption : [Algorithme AlphaBeta]
-)
+    ],
+    caption: [MinMax],
+    supplement: "Algorithme"
+) <algo_minmax>
 
 #pagebreak(weak: true)
 
@@ -318,11 +316,9 @@ Le pseudo code de l'algorithme implémenté est le suivant :
 
 L'algorithme AlphaBeta est une amélioration de l'algorithme MinMax. Il permet de réduire le nombre de nœuds explorés en élaguant les branches inutiles. Cette amélioration de l'algorithme précédent permet donc d'améliorer le temps d'exécution et de recherche.
 
-Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
+Le pseudo-code de l'algorithme utilisé est présenté par l'@algo_alphabeta
 
-#figure(
-  algorithm(
-    caption: [AlphaBeta],
+#algorithm(
     pseudocode-list(
       indentation-guide-stroke: stroke(thickness: .5pt),
     )[
@@ -348,14 +344,12 @@ Voici le pseudo-code de l'algorithme AlphaBeta que nous avons implémenté:
         + *retourner* _valeur_
 
       - *Premier appel* : alphabeta(_racine_, profondeur, -$infinity$, +$infinity$, VRAI)
-    ]
-),
-  supplement: "Figure",
-  kind: figure,
-  caption : [Algorithme AlphaBeta]
-)
+    ],
+  caption: [AlphaBeta],
+  supplement: "Algorithme"
+) <algo_alphabeta>
 
-
+#pagebreak(weak: true)
 
 = Stratégies
 
@@ -431,14 +425,19 @@ Si le déplacement n'est pas joué dans un coin alors la valeur est le nombre de
     ```cpp
     int MinMax::heuristic_mob(const Board &B, std::string move) const
     {
-        if (this->payoff_matrix[B.coordToIndex(move)] > 400)
-        {
-            return this->payoff_matrix[B.coordToIndex(move)];
-        }
+      if (this->payoff_matrix[B.coordToIndex(move)] > 400)
+      {
+          return this->payoff_matrix[B.coordToIndex(move)];
+      }
 
-        return B.getValidMoves(B.getCurrentPlayer()).size();
+      if (B.getCurrentPlayer() == Pawn::BLACK)
+      {
+          return B.getValidMoves(B.getCurrentPlayer()).size() - B.getValidMoves(Pawn::WHITE).size();
+      }
+
+      return B.getValidMoves(B.getCurrentPlayer()).size() - B.getValidMoves(Pawn::BLACK).size();
     }
-    ```
+    ```,
   ),
   caption: "Calcul heuristique mobilité",
   kind: figure,
@@ -528,10 +527,12 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
 
 === Stratégie positionnelle
 
+La stratégie positionnelle est la stratégie affichant les résultats les plus convainquants. Pour une profondeur de 5 l'algorithme MinMax ne perd quasiment aucune partie tant en jouant les noirs, @minmax_pos_black, qu'en jouant les blancs, @minmax_pos_white.
+
 #figure(
   rect(
     ```
-    $ ./main minmax random --depth-white 5 --strategy-white pos
+    $ ./main minmax random --depth-black 5 --strategy-black pos
       --benchmark 50 --only-final
       Game 50/50
 
@@ -546,8 +547,8 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement MinMax - Random sur 50 parties"
-)
+  caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie positionnelle"
+) <minmax_pos_black>
 
 #figure(
   rect(
@@ -567,15 +568,17 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement Random - MinMax sur 50 parties"
-)
+  caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie positionnelle"
+) <minmax_pos_white>
+
+On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 tiers 1 tier à l'avantage de l'algorithme MinMax
 
 === Stratégie absolue
 
 #figure(
   rect(
     ```
-    $ ./main minmax random --depth-white 5 --strategy-white abs
+    $ ./main minmax random --depth-black 5 --strategy-black abs
       --benchmark 50 --only-final
       Game 50/50
 
@@ -590,7 +593,7 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement MinMax - Random sur 50 parties"
+  caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie absolue"
 )
 
 #figure(
@@ -611,7 +614,7 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement Random - MinMax sur 50 parties"
+  caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie absolue"
 )
 
 === Stratégie mobilité
@@ -619,13 +622,22 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
 #figure(
   rect(
     ```
-    $ ./main minmax random --depth-white 5 --strategy-white mob
+    $ ./main minmax random --depth-black 5 --strategy-black mob
       --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:     34 (68%)
+      [BLANCS] Victoires:     14 (28%)
+      [******] Egalités:       2 (4%)
+      [EXEC  ] Temps moyen d'une partie: 15858.5ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  58%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 41%
     ```,
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement MinMax - Random sur 50 parties"
+  caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie mobilité"
 )
 
 #figure(
@@ -646,7 +658,7 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement Random - MinMax sur 50 parties"
+  caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mobilité"
 )
 
 === Stratégie mixte
@@ -654,13 +666,22 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
 #figure(
   rect(
     ```
-    $ ./main minmax random --depth-white 5 --strategy-white mixte
+    $ ./main minmax random --depth-black 5 --strategy-black mixte
       --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:     44 (88%)
+      [BLANCS] Victoires:      5 (10%)
+      [******] Egalités:       1 (2%)
+      [EXEC  ] Temps moyen d'une partie: 12724.4ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  65%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
     ```,
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement MinMax - Random sur 50 parties"
+  caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie mixte"
 )
 
 #figure(
@@ -668,20 +689,58 @@ Les tests présentés ont tous été effectuée sur 50 parties avec une profonde
     ```
     $ ./main random minmax --depth-white 5 --strategy-white mixte
       --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:      3 (6%)
+      [BLANCS] Victoires:     47 (94%)
+      [******] Egalités:       0 (0%)
+      [EXEC  ] Temps moyen d'une partie: 16227.5ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  34%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 65%
     ```,
   ),
   kind: figure,
   supplement: "Figure",
-  caption: "Affrontement Random - MinMax sur 50 parties"
+  caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mixte"
 )
 
 == AlphaBeta - Random
+
+En utilisant l'élagage AlphaBeta les résultats sont similaire. L'élagage étant une amélioration de l'algorithme MinMax normalement le taux de victoire ne doit pas varier significativement. Néanmoins grâce à cet élagage on remarque que la durée moyenne des parties chute de 14/15 secondes pour l'algorithme MinMax à 5 secondes lorsque l'élagage alphabeta est utilisé, soit une division par presque 3.
+
+Cette amélioration est donc non négligeable et extrèmement importante dans l'élaboration de telle algorithmes.
+
+Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnelle, @alphabeta_pos, une stratégie absolue, une stratégie mobilité et une stratégie mixte.
+
+#figure(
+  rect(
+    ```
+    $ ./main random alphabeta --depth-white 5 --strategy-white pos
+      --benchmark 50 --only-final
+      Game 50/50
+
+      ====== Résultats ======
+      [NOIRS ] Victoires:      7 (14%)
+      [BLANCS] Victoires:     41 (82%)
+      [******] Egalités:       2 (4%)
+      [EXEC  ] Temps moyen d'une partie: 5063.58ms
+      [EXEC  ] Occupation du terrain en moyenne par les noirs:  38%
+      [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie positionnelle"
+) <alphabeta_pos>
 
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
 
 = Perspectives d'amélioration
+
+Le projet est loin d'être optimal. Ici nous abordons quelques points qui, d'après notre point de vue, méritent d'être implémentés. Ces points permettrait d'améliorer les performances de calculs afin d'effectuer des analyses plus fines en poussant la profondeur de recherche ainsi que la taille de l'échantillon (respectivement de 5 et 20 dans les statistiques énoncées plus haut).
 
 == Threading
 
@@ -690,6 +749,8 @@ Une première amélioration majeure à apporter est le threading de la recherche
 Un premier threading efficace pourrai être la création d'un thread par branche initiale de l'arbre de recherche. De cette façon on divise au premier tour par 4 la durée d'exploration de l'algorithme, et plus encore en milieu de partie. Cette amélioration permettrait également d'augmenter considérablement la profondeur de recherche.
 
 == Affinement des heuristiques
+
+Comme vu dans les statistiques l'heuristique de mobilité notamment ne montre pas de résultats assez convainquant, les statistiques d'occupation du terrain devraient être bien plus élevés pour un algorithme qui maximise ses coups et contrôles les coins du plateau.
 
 == Pré-calcul de l'arbre de recherche
 

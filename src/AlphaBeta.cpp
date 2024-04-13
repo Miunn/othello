@@ -102,7 +102,8 @@ std::string AlphaBeta::play(const Board &board) const
     {
         Board *copy_board = new Board(board);
         copy_board->play(moves.at(i));
-        int eval = this->play_research(*copy_board, this->depth, INT_MIN, INT_MAX, this->player);
+        int eval = this->play_research(*copy_board, this->depth-1, INT_MIN, INT_MAX, this->player);
+        delete copy_board;
         if (eval > maxEval)
         {
             maxEval = eval;
@@ -126,12 +127,18 @@ int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta,
         {
             int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
             maxEval = std::max(maxEval, eval);
-            if (maxEval > beta)
+            if (maxEval >= beta)
             {
                 break;
             }
             alpha = std::max(alpha, eval);
         }
+
+        for (int j = 0; j < (int)sub_boards.size(); j++)
+        {
+            delete sub_boards.at(j);
+        }
+
         return maxEval;
     }
     else
@@ -142,12 +149,18 @@ int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta,
         {
             int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
             minEval = std::min(minEval, eval);
-            if (minEval < alpha)
+            if (minEval <= alpha)
             {
                 break;
             }
             beta = std::min(beta, eval);
         }
+
+        for (int j = 0; j < (int)sub_boards.size(); j++)
+        {
+            delete sub_boards.at(j);
+        }
+
         return minEval;
     }
 }
