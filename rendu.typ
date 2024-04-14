@@ -414,6 +414,8 @@ La stratégie absolue attribue une valeur au noeud en fonction du score du joueu
   supplement: "Figure"
 )
 
+#pagebreak(weak: true)
+
 == Mobilité
 
 L'heuristique mobilité se sert du dernier pion placé pour prioriser les déplacements dans les coins du plateau en se basant sur la matrice de récompense pour retourner le score scorrespondant.
@@ -444,13 +446,17 @@ Si le déplacement n'est pas joué dans un coin alors la valeur est le nombre de
   supplement: "Figure"
 )
 
+#pagebreak(weak: true)
+
 = Utilisation du CLI
 
 Une fois compilé (cf. @architecture), le programme peut être lancé en ligne de commande de la façon suivante:
 
 #align(center)[
   ```
-  othello BLACK WHITE [--depth-black PROFONDEUR] [--depth-white PROFONDEUR] [--benchmark MONTANT] [--display-grid] [--only-final]
+  $ ./othello BLACK WHITE [--depth-black PROFONDEUR] [--depth-white PROFONDEUR]
+  [--strategy-black STRATEGY] [--strategy-white STRATEGY] [--benchmark MONTANT]
+  [--display-grid] [--only-final]
   ```
 ]
 
@@ -473,6 +479,14 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
   [
     Profondeur personalisée pour l'algorithme jouant les pions blancs. Par défaut à 3, ignoré pour `player` et `random`.
   ],
+  [`--strategy-black STRATEGY`],
+  [
+    Indique la stratégie à utiliser pour l'algorithme jouant les pions noirs. Les valeurs sont: `pos`, `abs`, `mob` et `mixte`. Par défaut à `pos`.
+  ],
+  [`--strategy-white STRATEGY`],
+  [
+    Indique la stratégie à utiliser pour l'algorithme jouant les pions blancs. Les valeurs sont: `pos`, `abs`, `mob` et `mixte`. Par défaut à `pos`.
+  ],
   [`--benchmark MONTANT`],
   [
     Le programme joue autant de parties que `MONTANT` lui indique.
@@ -491,7 +505,7 @@ Une fois compilé (cf. @architecture), le programme peut être lancé en ligne d
 
 = Statistiques et Critiques
 
-Comparons les différents algorithmes alimentés des différentes stratégies.
+Comparons les différents algorithmes alimentés des différentes stratégies, positionnelle, absolue, mobilité et mixte.
 
 == Random - Random
 
@@ -841,6 +855,132 @@ Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnel
 ) <alphabeta_mixte>
 
 Malgré qu'AlphaBeta ne soit qu'un élagage de MinMax il semblerait que la moyenne du terrain occupé par ce dernier soit plus élevé (de l'ordre de 75% pour une stratégie mixte, @alphabeta_mixte et 70% pour une stratégie absolue, @alphabeta_abs) et cela même pour des échantillons de test plus grands. Il est raisonnable de penser que cela est donc potentiellement dû à la profondeur encore trop faible.
+
+== AlphaBeta - AlphaBeta
+
+Etudions quelques parties jouées entre deux algorithmes AlphaBeta utilisant différentes stratégies. Les algorithmes étant déterministes, inutile de jouer plus d'une partie pour déterminer des statistiques étant donnée qu'elle seront tous identiques. Aussi, AlphaBeta une amélioration de l'algorithme MinMax nous regarderons uniquement des parties jouées entre AlphaBeta et AlphaBeta, par soucis de rapidité.
+
+Intéressont nous donc à comment se comporte les différentes stratégies  entre elles pour des profondeurs variées.
+
+#figure(
+  rect(
+    ```
+    $ ./main alphabeta alphabeta --benchmark 1 --display-grid --depth-black 6 --depth-white 6 --strategy-black mob
+    ==== Game     1/1 ====
+    +-----------------------+
+    | Résultat:      Blancs |
+    |-----------------------|
+    | Vide | Noirs | Blancs |
+    |-----------------------|
+    |    0 |    27 |     37 |
+    +-----------------------+
+
+    Grille de jeu:
+      a b c d e f g h
+    1 O # # # # # # O 
+    2 O # # # O O # O 
+    3 O # # O O O # O 
+    4 O # # O O # # O 
+    5 O # O O # O # O 
+    6 O # O # # # # O 
+    7 O O # O O O # O 
+    8 O O O O O O O O 
+
+
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      0 (0%)
+    [BLANCS] Victoires:      1 (100%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 25617.1ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  42%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 57%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement AlphaBeta mobilité - Alphabeta positionnel"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main alphabeta alphabeta --benchmark 1 --display-grid --depth-black 6 --depth-white 6 --strategy-black mixte   
+    ==== Game     1/1 ====
+    +-----------------------+
+    | Résultat:       Noirs |
+    |-----------------------|
+    | Vide | Noirs | Blancs |
+    |-----------------------|
+    |    0 |    36 |     28 |
+    +-----------------------+
+
+    Grille de jeu:
+      a b c d e f g h
+    1 O O O O O O O O 
+    2 O # # # # # # # 
+    3 O # O # # O # # 
+    4 O # # # # # O # 
+    5 O # # O # # O # 
+    6 O O O # # # O # 
+    7 O O # # # O O # 
+    8 O # # # # O O # 
+
+
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      1 (100%)
+    [BLANCS] Victoires:      0 (0%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 32193.9ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  56%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 43%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Alphabeta mixte - Alphabeta positionnel"
+)
+
+#figure(
+  rect(
+    ```
+    $ ./main alphabeta alphabeta --benchmark 1 --display-grid --depth-black 6 --depth-white 10 --strategy-black mob --strategy-white mob
+    ==== Game     1/1 ====
+    +-----------------------+
+    | Résultat:      Blancs |
+    |-----------------------|
+    | Vide | Noirs | Blancs |
+    |-----------------------|
+    |    0 |    11 |     53 |
+    +-----------------------+
+
+    Grille de jeu:
+      a b c d e f g h
+    1 O O O O O O O O 
+    2 O O O O O O O O 
+    3 O O # O O O O O 
+    4 O O O # O O O O 
+    5 O O # # # O O O 
+    6 O O O # O # O O 
+    7 O O # O # O # O 
+    8 O O O O O O O # 
+
+
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      0 (0%)
+    [BLANCS] Victoires:      1 (100%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 417855ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  17%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 82%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Comparaison de la stratégie mobilité pour des profondeurs de 6 pour les noirs et 10 pour les blancs"
+)
 
 = Problèmes rencontrés
 
