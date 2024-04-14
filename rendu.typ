@@ -589,6 +589,8 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
 
 === Stratégie absolue
 
+La stratégie absolue est moins performante, avec un taux de victoire d'environ 87%. En effet, cette stratégie ne prend pas en compte la position des pions sur le plateau et se contente de maximiser son score, ce qui la désavantage, puisque les coins du plateau sont des positions très stratégiques.
+
 #figure(
   rect(
     ```
@@ -630,6 +632,8 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   supplement: "Figure",
   caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie absolue"
 )
+
+
 
 === Stratégie mobilité
 
