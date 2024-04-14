@@ -619,6 +619,10 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
 
 === Stratégie mobilité
 
+La stratégie mobilité priorise les coins du plateau, étant considérés comme les emplacements les plus profitables et permettant d'engranger beaucoup de pions tout au long de la partie en reprenant ceux de l'adversaire. Lorsqu'elle ne peut jouer dans un coin la stratégie a pour but de minimiser les coups disponibles pour son adversaire en amximisant les siens.
+
+Les résultats obtenus par MinMax jouant les noirs en utilisant cette stratégie sont présentés en @minmax_black_mob et ceux en jouant les blanc en @minmax_white_mob
+
 #figure(
   rect(
     ```
@@ -638,7 +642,7 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie mobilité"
-)
+) <minmax_black_mob>
 
 #figure(
   rect(
@@ -659,9 +663,48 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mobilité"
-)
+) <minmax_white_mob>
+
+Pour une stratégie minisant les coups disponibles pour l'adversaire et s'offrant une grande possibilité de jeu on devrait s'attendre à une occupationdu terrain plus accrue, c'est pourquoi nous émettons des doutes quand à la précision de notre heuristique.
+
+Néanmoins des parties étouffant rapidement l'adversaire ont été joué en utilisant cette stratégie telle que celle en @ex_minmax_mob_1
+
+#figure(
+  rect(
+    ```
+    +-----------------------+
+    | Résultat:      Blancs |
+    |-----------------------|
+    | Vide | Noirs | Blancs |
+    |-----------------------|
+    |   30 |     0 |     34 |
+    +-----------------------+
+
+    Grille de jeu:
+      a b c d e f g h
+    1 . . O O O . . . 
+    2 . . O O O . . . 
+    3 O O O O O . . . 
+    4 O O O O O . . . 
+    5 O O O O O O . . 
+    6 O O O O O . . . 
+    7 . O O . O O . . 
+    8 O . O . . O . .
+    ```,
+    inset: 10pt
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Exemple de partie jouée par MinMax en utilisant une stratégie mobilité"
+) <ex_minmax_mob_1>
+
+
 
 === Stratégie mixte
+
+La stratégie mixte combine les trois stratégies vus précedemment. L'algorithme joue suivant la matrice de poids statistiques pour les 25 premiers coups, ensuite considère les coins en maximisant ses propres coups et minimisant ceux de son adversaire et joue les 22 derniers coups en maximisant son score et minimisant celui de l'adversaire.
+
+Malgré les présumés défauts de notre heuristique de mobilité, la stratégie mixte affiche des résultat également convainquants en maitrisant une grande partie du plateau.
 
 #figure(
   rect(
@@ -797,11 +840,13 @@ Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnel
   caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie mixte"
 ) <alphabeta_mixte>
 
+Malgré qu'AlphaBeta ne soit qu'un élagage de MinMax il semblerait que la moyenne du terrain occupé par ce dernier soit plus élevé (de l'ordre de 75% pour une stratégie mixte, @alphabeta_mixte et 70% pour une stratégie absolue, @alphabeta_abs) et cela même pour des échantillons de test plus grands. Il est raisonnable de penser que cela est donc potentiellement dû à la profondeur encore trop faible.
+
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
 
-= Perspectives d'amélioration
+= Perspectives d'amélioration et conclusion
 
 Le projet est loin d'être optimal. Ici nous abordons quelques points qui, d'après notre point de vue, méritent d'être implémentés. Ces points permettrait d'améliorer les performances de calculs afin d'effectuer des analyses plus fines en poussant la profondeur de recherche ainsi que la taille de l'échantillon (respectivement de 5 et 50 dans les statistiques énoncées plus haut).
 
@@ -815,6 +860,8 @@ Un premier threading efficace pourrai être la création d'un thread par branche
 
 Comme vu dans les statistiques l'heuristique de mobilité notamment ne montre pas de résultats assez convainquant, les statistiques d'occupation du terrain devraient être bien plus élevés pour un algorithme qui maximise ses coups et contrôles les coins du plateau.
 
+Il serait également intéressant de faire varier les plages d'heuristiques pour la stratégie mixte ou d'en modifier l'ordre pour en analyser les évolutions.
+
 == Pré-calcul de l'arbre de recherche
 
 Afin d'optimiser davantage le temps de calcul et les performances du programme, un pré-calcul des noeuds et des coups à jouer en fonction pourrait être effectué moyennant un compromis sur le stockage de ces données.
@@ -827,5 +874,5 @@ Les algorithmes `minmax` et `alphabeta` sont des algorithmes déterministes, il 
 
 Pour améliorer ce processus l'optimal serait d'implémenter un algorithme non déterministe tel qu'un algorithme de Monte-Carlo. Celui-ci s'exécuterai en un temps déterministe (non infini et non aléatoire) mais dont le résultat contient une part d'aléatoire. De cette façon les parties contre un algorithme déterministe ne seront jamais identiques et il sera possible de départager ces dernier de façon plus intéressante qu'avec un algorithme complètement aléatoire.
 
-= Conclusion
+== Conclusion
 
