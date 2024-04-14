@@ -762,6 +762,8 @@ Malgré les présumés défauts de notre heuristique de mobilité, la stratégie
   caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mixte"
 )
 
+#pagebreak(weak: true)
+
 == AlphaBeta - Random
 
 En utilisant l'élagage AlphaBeta les résultats sont similaire. L'élagage étant une amélioration de l'algorithme MinMax normalement le taux de victoire ne doit pas varier significativement. Néanmoins grâce à cet élagage on remarque que la durée moyenne des parties chute de 14/15 secondes pour l'algorithme MinMax à 5 secondes lorsque l'élagage alphabeta est utilisé, soit une division par presque 3.
@@ -900,7 +902,7 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement AlphaBeta mobilité - Alphabeta positionnel"
-)
+) <alphabeta_mob_pos>
 
 #figure(
   rect(
@@ -940,7 +942,7 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement Alphabeta mixte - Alphabeta positionnel"
-)
+) <alphabeta_mixte_pos>
 
 #figure(
   rect(
@@ -980,11 +982,13 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   kind: figure,
   supplement: "Figure",
   caption: "Comparaison de la stratégie mobilité pour des profondeurs de 6 pour les noirs et 10 pour les blancs"
-)
+) <alphabeta_mob_6_10>
 
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
+
+#pagebreak(weak: true)
 
 = Perspectives d'amélioration et conclusion
 
