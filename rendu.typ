@@ -194,7 +194,7 @@ Le type `Direction` représentera une direction dans les fonctions de vérificat
 
 === Coeur de la classe
 
-Le premier objectif de la classe `Board` est de sauvegarder l'état du plateau. Cette sauvegarde est effectuée dans un tableau à une dimension de type `Pawn`. Pour accéder à une case du tableau on effectuera donc l'opération : _ligne_ $*$ _taille_ $+$ _colonne_, c'est le rôle de la fonction `coordToIndex(const std::string& coord) const;` qui prend en paramètre une coordonnée litérale (i.e. "b3") et qui la convertit en un index valide du tableau (i.e. "17").
+Le premier objectif de la classe `Board` est de sauvegarder l'état du plateau. Cette sauvegarde est effectuée dans un tableau à une dimension de type `Pawn`. Pour accéder à une case du tableau on effectuera donc l'opération : _ligne_ $*$ _taille_ $+$ _colonne_, c'est le rôle de la fonction `coordToIndex(const std::string& coord) const;` qui prend en paramètre une coordonnée littérale (i.e. "b3") et qui la convertit en un index valide du tableau (i.e. "17").
 
 La classe intègre également le joueur qui doit actuellement jouer (via le champ `Pawn currentPlayer`), cela permettra aux modèles IA d'effectuer les calculs (minimisation et maximisation par exemple) de manière cohérente avec le joueur courant étant donné qu'un même joueur peut jouer plusieurs fois à la suite.
 
@@ -221,11 +221,11 @@ et
 
 La fonction `startGame` prend en paramètre deux interfaces d'intelligence artificielle (détaillées ci-après) correspondant au joueur noir et au joueur blanc et joue la partie.
 
-La fonction `analyseGame` s'apelle lorsque la partie instanciée avec la classe `Game` est terminée. Cette fonction permet l'affichage de différentes statistiques telles que le gagnant, le nombre de pions capturés et la durée de la partie. Si le paramètre `displayGrid` est égal à `true` la fonction affiche également la grille finale.
+La fonction `analyseGame` s'appelle lorsque la partie instanciée avec la classe `Game` est terminée. Cette fonction permet l'affichage de différentes statistiques telles que le gagnant, le nombre de pions capturés et la durée de la partie. Si le paramètre `displayGrid` est égal à `true` la fonction affiche également la grille finale.
 
 = Interfaces d'intelligence artificielle
 
-Afin d'implémenter différents algorithmes d'intelligence artificielle au sein du programme nous avons en premier créé une classe mère disposant de la déclaration commune des différents attributs et fonctions dont chaque algorithme doit diposer.
+Afin d'implémenter différents algorithmes d'intelligence artificielle au sein du programme nous avons en premier créé une classe mère disposant de la déclaration commune des différents attributs et fonctions dont chaque algorithme doit disposer.
 
 Cette définition générale correspond à la classe `AInterface` dont la déclaration se trouve dans le fichier `AInterface.hpp`.
 
@@ -353,7 +353,7 @@ Le pseudo-code de l'algorithme utilisé est présenté par l'@algo_alphabeta
 
 = Stratégies
 
-Les stratégies _positionnelle_, _absolue_, _mobilité_ et _mixte_ ont été implémentée pour les algorithmes MinMax et AlphaBeta.
+Les stratégies _positionnelle_, _absolue_, _mobilité_ et _mixte_ ont été implémentées pour les algorithmes MinMax et AlphaBeta.
 
 L'algorithme choisit l'heuristique correspondant à la stratégie donnée en paramètre lors de son initialisation.
 
@@ -390,7 +390,7 @@ L'heuristique positionnelle calcule le score du noeud en se basant sur la matric
 
 == Absolue
 
-La stratégie absolue attribue une valeur au noeud en fonction du score du joueur. Le score étant représenté par le nombre de pions du joueurs correspondant, le code de l'heuristique est assez simple. Néanmoins on fera attention a la subtilité en fonction du joueur joué par l'algorithme pour ne pas avoir une valeur de noeud négative :
+La stratégie absolue attribue une valeur au noeud en fonction du score du joueur. Le score étant représenté par le nombre de pions du joueurs correspondant, le code de l'heuristique est assez simple. Néanmoins on fera attention à la subtilité en fonction du joueur joué par l'algorithme pour ne pas avoir une valeur de noeud négative :
 
 #figure(
   rect(
@@ -418,7 +418,7 @@ La stratégie absolue attribue une valeur au noeud en fonction du score du joueu
 
 == Mobilité
 
-L'heuristique mobilité se sert du dernier pion placé pour prioriser les déplacements dans les coins du plateau en se basant sur la matrice de récompense pour retourner le score scorrespondant.
+L'heuristique mobilité se sert du dernier pion placé pour prioriser les déplacements dans les coins du plateau en se basant sur la matrice de récompense pour retourner le score correspondant.
 
 Si le déplacement n'est pas joué dans un coin alors la valeur est le nombre de déplacement possible.
 
@@ -531,17 +531,17 @@ Dans un premier temps vérifions que l'affrontement entre 2 algorithmes complèt
   supplement: "Figure"
 )
 
-Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néamoins remarquer un avantage pour ces derniers en jouant de manière totalement aléatoire. On peut potentiellement expliquer cet avantage comme étant dû à l'ordre de jeu. En effet, jouant en deuxième, les blancs peuvent capturer le pion joué par les noirs aux premier tour, offrant un potentiel un avantage.
+Malgré la proximité des 50% de parties gagnées pour les blancs, on peut néamoins remarquer un avantage pour ces derniers en jouant de manière totalement aléatoire. On peut potentiellement expliquer cet avantage comme étant dû à l'ordre de jeu. En effet, jouant en deuxième, les blancs peuvent capturer le pion joué par les noirs au premier tour, offrant un potentiel avantage.
 
 == Minmax - Random
 
 Ci-dessous sont détaillés différents résultats impliquant l'algorithme MinMax contre un algorithme complètement aléatoire.
 
-Les tests présentés ont tous été effectuée sur 50 parties avec une profondeur de recherche de 5 coups.
+Les tests présentés ont tous été effectués sur 50 parties avec une profondeur de recherche de 5 coups.
 
 === Stratégie positionnelle
 
-La stratégie positionnelle est la stratégie affichant les résultats les plus convainquants. Pour une profondeur de 5 l'algorithme MinMax ne perd quasiment aucune partie tant en jouant les noirs, @minmax_pos_black, qu'en jouant les blancs, @minmax_pos_white.
+La stratégie positionnelle est la stratégie affichant les résultats les plus convainquants. Pour une profondeur de 5, l'algorithme MinMax ne perd quasiment aucune partie tant en jouant les noirs, @minmax_pos_black, qu'en jouant les blancs, @minmax_pos_white.
 
 #figure(
   rect(
@@ -679,9 +679,9 @@ Les résultats obtenus par MinMax jouant les noirs en utilisant cette stratégie
   caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mobilité"
 ) <minmax_white_mob>
 
-Pour une stratégie minisant les coups disponibles pour l'adversaire et s'offrant une grande possibilité de jeu on devrait s'attendre à une occupationdu terrain plus accrue, c'est pourquoi nous émettons des doutes quand à la précision de notre heuristique.
+Pour une stratégie minisant les coups disponibles pour l'adversaire et s'offrant une grande possibilité de jeu on devrait s'attendre à une occupation du terrain plus accrue, c'est pourquoi nous émettons des doutes quand à la précision de notre heuristique.
 
-Néanmoins des parties étouffant rapidement l'adversaire ont été joué en utilisant cette stratégie telle que celle en @ex_minmax_mob_1
+Néanmoins, des parties étouffant rapidement l'adversaire ont été jouées en utilisant cette stratégie telle que celle en @ex_minmax_mob_1
 
 #figure(
   rect(
@@ -716,7 +716,7 @@ Néanmoins des parties étouffant rapidement l'adversaire ont été joué en uti
 
 === Stratégie mixte
 
-La stratégie mixte combine les trois stratégies vus précedemment. L'algorithme joue suivant la matrice de poids statistiques pour les 25 premiers coups, ensuite considère les coins en maximisant ses propres coups et minimisant ceux de son adversaire et joue les 22 derniers coups en maximisant son score et minimisant celui de l'adversaire.
+La stratégie mixte combine les trois stratégies vues précédemment. L'algorithme joue suivant la matrice de poids statistiques pour les 25 premiers coups, ensuite considère les coins en maximisant ses propres coups et minimisant ceux de son adversaire et joue les 22 derniers coups en maximisant son score et minimisant celui de l'adversaire.
 
 Malgré les présumés défauts de notre heuristique de mobilité, la stratégie mixte affiche des résultat également convainquants en maitrisant une grande partie du plateau.
 
@@ -768,7 +768,7 @@ Malgré les présumés défauts de notre heuristique de mobilité, la stratégie
 
 En utilisant l'élagage AlphaBeta les résultats sont similaire. L'élagage étant une amélioration de l'algorithme MinMax normalement le taux de victoire ne doit pas varier significativement. Néanmoins grâce à cet élagage on remarque que la durée moyenne des parties chute de 14/15 secondes pour l'algorithme MinMax à 5 secondes lorsque l'élagage alphabeta est utilisé, soit une division par presque 3.
 
-Cette amélioration est donc non négligeable et extrèmement importante dans l'élaboration de telle algorithmes.
+Cette amélioration est donc non négligeable et extrèmement importante dans l'élaboration de tels algorithmes.
 
 Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnelle, @alphabeta_pos, une stratégie absolue, @alphabeta_abs, une stratégie mobilité, @alphabeta_mob, et une stratégie mixte, @alphabeta_mixte.
 
@@ -904,6 +904,8 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   caption: "Affrontement AlphaBeta mobilité - Alphabeta positionnel"
 ) <alphabeta_mob_pos>
 
+Cela montre qu'en général la stratégie positionnel est plus efficace que la stratégie mobilité. On fera remarquer que la stratégie positionelle à une partie de mobilité en elle, étant donné que les coins sont pris en compte dans le score de 500.
+
 #figure(
   rect(
     ```
@@ -943,6 +945,8 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   supplement: "Figure",
   caption: "Affrontement Alphabeta mixte - Alphabeta positionnel"
 ) <alphabeta_mixte_pos>
+
+La stratégie mixte étant une amélioration de la stratégie positionelle en combinant les trois stratégies, ce résultat n'est pas étonnant. De plus cela montre que la stratégie mobilité a besoin d'être accompagnée pour bien fonctionner.
 
 #figure(
   rect(
@@ -984,6 +988,8 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   caption: "Comparaison de la stratégie mobilité pour des profondeurs de 6 pour les noirs et 10 pour les blancs"
 ) <alphabeta_mob_6_10>
 
+Pour des profondeurs différentes, on remarque que la stratégie mobilité est plus largement plus efficace pour une profondeur de 6 que pour une profondeur de 10. La majorité des coins et con du terrain sont pris par les blancs, ce qui est un signe de bonne stratégie.
+
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
@@ -1010,7 +1016,7 @@ Il serait également intéressant de faire varier les plages d'heuristiques pour
 
 Afin d'optimiser davantage le temps de calcul et les performances du programme, un pré-calcul des noeuds et des coups à jouer en fonction pourrait être effectué moyennant un compromis sur le stockage de ces données.
 
-Ce pré-calcul indiquerait pour tel noeud courrant le cuop optimal à jouer de manière immédiate sans calcul supplémentaire. Il pourrait être effectué sur les noeuds de début et de fin de partie, instants dans lesquels l'arbre de recherche se réduit.
+Ce pré-calcul indiquerait pour tel noeud courrant le coup optimal à jouer de manière immédiate sans calcul supplémentaire. Il pourrait être effectué sur les noeuds de début et de fin de partie, instants dans lesquels l'arbre de recherche se réduit.
 
 == Implémentation de nouveaux algorithmes
 
@@ -1020,3 +1026,14 @@ Pour améliorer ce processus l'optimal serait d'implémenter un algorithme non d
 
 == Conclusion
 
+Après avoir analysé les différentes parties jouées entre une variété d'algorithmes et de stratégies pour le jeu Othello, plusieurs constats peuvent être faits.
+
+Tout d'abord, il est clair que la qualité de l'algorithme joue un rôle crucial dans le résultat de la partie. Les performances des algorithmes MinMax et AlphaBeta varients considérablement en fonction de la stratégie utilisée. La stratégie mixte se révèle extrêmement efficace, tandis que la stratégie mobilité montre des résultats moins convainquants.
+
+L'introduction d'AlphaBeta apporte non seulement une amélioration significative des performances en termes de temps de calcuml, mais également une augmentation de la proportion de terrain contrôlé par l'algorithme. Cela suggère que l'étalage AlphaBeta est plus efficace pour explorer l'arbre de recherche, conduisant à des mouvements plus précis et plus avantageux.
+
+En ce qui concerne les perspectives d'amélioration, l'intégration du threading pour exploiter pleinement les capacités de calcul parallèle des processeurs modernes apparaît comme une évolution incontournable. De même, l'affinement des heuristiques, en particulier celle de la mobilité, ainsi que le pré-calcul de l'arbre de recherche pour éviter les redondances semblent prometteurs pour augmenter la qualité des décisions prises par l'algorithme.
+
+Enfin, l'implémentation de nouveaux algorithmes non déterministes comme Monte-Carlo pourrait ouvrir de nouvelles perspectives pour une analyse plus approfondie du jeu, offrant des résultats moins prévisibles et potentiellement plus proches de ceux obtenus par des joueurs humains.
+
+En combinant ces améliorations et en continuant à explorer de nouvelles stratégies et techniques, il est possible d'atteindre des performances encore plus élevées dans le jeu Othello, tout en enrichissant notre compréhension des aspects stratégiques et tactiques de ce jeu.
