@@ -533,16 +533,16 @@ La stratégie positionnelle est la stratégie affichant les résultats les plus 
   rect(
     ```
     $ ./main minmax random --depth-black 5 --strategy-black pos
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:     49 (98%)
-      [BLANCS] Victoires:      1 (2%)
-      [******] Egalités:       0 (0%)
-      [EXEC  ] Temps moyen d'une partie: 16841.1ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  66%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
+    ====== Résultats ======
+    [NOIRS ] Victoires:     49 (98%)
+    [BLANCS] Victoires:      1 (2%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 16841.1ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  66%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
     ```,
   ),
   kind: figure,
@@ -554,16 +554,16 @@ La stratégie positionnelle est la stratégie affichant les résultats les plus 
   rect(
     ```
     $ ./main random minmax --depth-white 5 --strategy-white pos
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:      2 (4%)
-      [BLANCS] Victoires:     48 (96%)
-      [******] Egalités:       0 (0%)
-      [EXEC  ] Temps moyen d'une partie: 13651ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 63%
+    ====== Résultats ======
+    [NOIRS ] Victoires:      2 (4%)
+    [BLANCS] Victoires:     48 (96%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 13651ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 63%
     ```,
   ),
   kind: figure,
@@ -579,16 +579,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main minmax random --depth-black 5 --strategy-black abs
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:     43 (86%)
-      [BLANCS] Victoires:      7 (14%)
-      [******] Egalités:       0 (0%)
-      [EXEC  ] Temps moyen d'une partie: 7583.37ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  59%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 27%
+    ====== Résultats ======
+    [NOIRS ] Victoires:     43 (86%)
+    [BLANCS] Victoires:      7 (14%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 7583.37ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  59%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 27%
     ```,
   ),
   kind: figure,
@@ -600,16 +600,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main random minmax --depth-white 5 --strategy-white abs
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:      5 (10%)
-      [BLANCS] Victoires:     44 (88%)
-      [******] Egalités:       1 (2%)
-      [EXEC  ] Temps moyen d'une partie: 14086.5ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 62%
+    ====== Résultats ======
+    [NOIRS ] Victoires:      5 (10%)
+    [BLANCS] Victoires:     44 (88%)
+    [******] Egalités:       1 (2%)
+    [EXEC  ] Temps moyen d'une partie: 14086.5ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  35%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 62%
     ```,
   ),
   kind: figure,
@@ -623,16 +623,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main minmax random --depth-black 5 --strategy-black mob
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:     34 (68%)
-      [BLANCS] Victoires:     14 (28%)
-      [******] Egalités:       2 (4%)
-      [EXEC  ] Temps moyen d'une partie: 15858.5ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  58%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 41%
+    ====== Résultats ======
+    [NOIRS ] Victoires:     34 (68%)
+    [BLANCS] Victoires:     14 (28%)
+    [******] Egalités:       2 (4%)
+    [EXEC  ] Temps moyen d'une partie: 15858.5ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  58%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 41%
     ```,
   ),
   kind: figure,
@@ -644,16 +644,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main random minmax --depth-white 5 --strategy-white mob
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:      3 (6%)
-      [BLANCS] Victoires:     45 (90%)
-      [******] Egalités:       2 (4%)
-      [EXEC  ] Temps moyen d'une partie: 13721.5ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  37%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
+    ====== Résultats ======
+    [NOIRS ] Victoires:      3 (6%)
+    [BLANCS] Victoires:     45 (90%)
+    [******] Egalités:       2 (4%)
+    [EXEC  ] Temps moyen d'une partie: 13721.5ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  37%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
     ```,
   ),
   kind: figure,
@@ -667,16 +667,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main minmax random --depth-black 5 --strategy-black mixte
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:     44 (88%)
-      [BLANCS] Victoires:      5 (10%)
-      [******] Egalités:       1 (2%)
-      [EXEC  ] Temps moyen d'une partie: 12724.4ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  65%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
+    ====== Résultats ======
+    [NOIRS ] Victoires:     44 (88%)
+    [BLANCS] Victoires:      5 (10%)
+    [******] Egalités:       1 (2%)
+    [EXEC  ] Temps moyen d'une partie: 12724.4ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  65%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 33%
     ```,
   ),
   kind: figure,
@@ -688,16 +688,16 @@ On remarque que le terrain occupé est en moyenne réparti avec la proportion 2 
   rect(
     ```
     $ ./main random minmax --depth-white 5 --strategy-white mixte
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:      3 (6%)
-      [BLANCS] Victoires:     47 (94%)
-      [******] Egalités:       0 (0%)
-      [EXEC  ] Temps moyen d'une partie: 16227.5ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  34%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 65%
+    ====== Résultats ======
+    [NOIRS ] Victoires:      3 (6%)
+    [BLANCS] Victoires:     47 (94%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 16227.5ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  34%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 65%
     ```,
   ),
   kind: figure,
@@ -711,22 +711,22 @@ En utilisant l'élagage AlphaBeta les résultats sont similaire. L'élagage éta
 
 Cette amélioration est donc non négligeable et extrèmement importante dans l'élaboration de telle algorithmes.
 
-Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnelle, @alphabeta_pos, une stratégie absolue, une stratégie mobilité et une stratégie mixte.
+Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnelle, @alphabeta_pos, une stratégie absolue, @alphabeta_abs, une stratégie mobilité, @alphabeta_mob, et une stratégie mixte, @alphabeta_mixte.
 
 #figure(
   rect(
     ```
     $ ./main random alphabeta --depth-white 5 --strategy-white pos
-      --benchmark 50 --only-final
-      Game 50/50
+    --benchmark 50 --only-final
+    Game 50/50
 
-      ====== Résultats ======
-      [NOIRS ] Victoires:      7 (14%)
-      [BLANCS] Victoires:     41 (82%)
-      [******] Egalités:       2 (4%)
-      [EXEC  ] Temps moyen d'une partie: 5063.58ms
-      [EXEC  ] Occupation du terrain en moyenne par les noirs:  38%
-      [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
+    ====== Résultats ======
+    [NOIRS ] Victoires:      7 (14%)
+    [BLANCS] Victoires:     41 (82%)
+    [******] Egalités:       2 (4%)
+    [EXEC  ] Temps moyen d'une partie: 5063.58ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  38%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 61%
     ```
   ),
   kind: figure,
@@ -734,13 +734,76 @@ Ci-dessous les résultats obtenus pour AlphaBeta pour une stratégie positionnel
   caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie positionnelle"
 ) <alphabeta_pos>
 
+#figure(
+  rect(
+    ```
+    $ ./main random alphabeta --depth-white 5 --strategy-white abs
+    --benchmark 50 --only-final
+    Game 50/50
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      6 (12%)
+    [BLANCS] Victoires:     43 (86%)
+    [******] Egalités:       1 (2%)
+    [EXEC  ] Temps moyen d'une partie: 2537.22ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  26%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 72%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie absolue"
+) <alphabeta_abs>
+
+#figure(
+  rect(
+    ```
+    $ ./main random alphabeta --depth-white 5 --strategy-white mob
+    --benchmark 50 --only-final
+    Game 50/50
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      7 (14%)
+    [BLANCS] Victoires:     43 (86%)
+    [******] Egalités:       0 (0%)
+    [EXEC  ] Temps moyen d'une partie: 4963.3ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  30%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 68%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie mobilité"
+) <alphabeta_mob>
+
+#figure(
+  rect(
+    ```
+    $ ./main random alphabeta --depth-white 5 --strategy-white mixte
+    --benchmark 50 --only-final
+    Game 50/50
+
+    ====== Résultats ======
+    [NOIRS ] Victoires:      2 (4%)
+    [BLANCS] Victoires:     46 (92%)
+    [******] Egalités:       2 (4%)
+    [EXEC  ] Temps moyen d'une partie: 5092.83ms
+    [EXEC  ] Occupation du terrain en moyenne par les noirs:  21%
+    [EXEC  ] Occupation du terrain en moyenne par les blancs: 76%
+    ```
+  ),
+  kind: figure,
+  supplement: "Figure",
+  caption: "Affrontement Random - AlphaBeta sur 50 parties pour une stratégie mixte"
+) <alphabeta_mixte>
+
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
 
 = Perspectives d'amélioration
 
-Le projet est loin d'être optimal. Ici nous abordons quelques points qui, d'après notre point de vue, méritent d'être implémentés. Ces points permettrait d'améliorer les performances de calculs afin d'effectuer des analyses plus fines en poussant la profondeur de recherche ainsi que la taille de l'échantillon (respectivement de 5 et 20 dans les statistiques énoncées plus haut).
+Le projet est loin d'être optimal. Ici nous abordons quelques points qui, d'après notre point de vue, méritent d'être implémentés. Ces points permettrait d'améliorer les performances de calculs afin d'effectuer des analyses plus fines en poussant la profondeur de recherche ainsi que la taille de l'échantillon (respectivement de 5 et 50 dans les statistiques énoncées plus haut).
 
 == Threading
 

@@ -25,8 +25,6 @@ MinMax::MinMax(Pawn player, int depth, Strategy strategy)
 
     this->depth = depth;
     this->strategy = strategy;
-
-    std::cout << "MinMax(" << depth << ") - " << strategy << std::endl;
 }
 
 int MinMax::heuristic(const Board &B, std::string move) const
@@ -40,7 +38,6 @@ int MinMax::heuristic(const Board &B, std::string move) const
         return heuristic_abs(B);
 
     case MOBILITE:
-        std::cout << "Call heuristic mob" << std::endl;
         return heuristic_mob(B, move);
 
     case MIXTE:

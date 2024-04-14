@@ -27,18 +27,21 @@ AlphaBeta::AlphaBeta(Pawn player, int depth, Strategy strategy)
     this->strategy = strategy;
 }
 
-int AlphaBeta::heuristic(const Board &B) const
+int AlphaBeta::heuristic(const Board &B, std::string move) const
 {
     switch (this->strategy)
     {
     case POSITIONNEL:
         return heuristic_pos(B);
-
+    
     case ABSOLU:
         return heuristic_abs(B);
 
     case MOBILITE:
-        return heuristic_mob(B);
+        return heuristic_mob(B, move);
+
+    case MIXTE:
+        return heuristic_mixte(B, move);
 
     default:
         return -1;
@@ -75,9 +78,33 @@ int AlphaBeta::heuristic_abs(const Board &B) const
     }
 }
 
-int AlphaBeta::heuristic_mob(const Board &B) const
+int AlphaBeta::heuristic_mob(const Board &B, std::string move) const
 {
-    return 0;
+    if (this->payoff_matrix[B.coordToIndex(move)] > 400)
+    {
+        return this->payoff_matrix[B.coordToIndex(move)];
+    }
+
+    if (B.getCurrentPlayer() == Pawn::BLACK)
+    {
+        return B.getValidMoves(B.getCurrentPlayer()).size() - B.getValidMoves(Pawn::WHITE).size();
+    }
+
+    return B.getValidMoves(B.getCurrentPlayer()).size() - B.getValidMoves(Pawn::BLACK).size();
+}
+
+int AlphaBeta::heuristic_mixte(const Board &B, std::string move) const
+{
+    if (B.getMovesPlayed() < 25)
+    {
+        return this->heuristic_pos(B);
+    }
+    else if (B.getMovesPlayed() < 42)
+    {
+        return this->heuristic_mob(B, move);
+    }
+
+    return this->heuristic_abs(B);
 }
 
 std::vector<Board *> AlphaBeta::computeSubBoards(const Board &board) const
@@ -102,7 +129,7 @@ std::string AlphaBeta::play(const Board &board) const
     {
         Board *copy_board = new Board(board);
         copy_board->play(moves.at(i));
-        int eval = this->play_research(*copy_board, this->depth-1, INT_MIN, INT_MAX, this->player);
+        int eval = this->play_research(*copy_board, this->depth-1, INT_MIN, INT_MAX, this->player, moves.at(i));
         delete copy_board;
         if (eval > maxEval)
         {
@@ -113,19 +140,28 @@ std::string AlphaBeta::play(const Board &board) const
     return best_move;
 }
 
-int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta, Pawn maxPawn) const
+int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta, Pawn maxPawn, std::string move) const
 {
     if (depth == 0 || board.isGameFinished())
     {
-        return this->heuristic(board);
+        return this->heuristic(board, move);
     }
+
+    std::vector<Board *> sub_boards = {};
+    std::vector<std::string> moves = board.getValidMoves(board.getCurrentPlayer());
+    for (int j = 0; j < (int)moves.size(); j++)
+    {
+        Board *copy_board = new Board(board);
+        copy_board->play(moves.at(j));
+        sub_boards.push_back(copy_board);
+    }
+
     if (maxPawn == board.getCurrentPlayer())
     {
         int maxEval = INT_MIN;
-        std::vector<Board *> sub_boards = this->computeSubBoards(board);
         for (int i = 0; i < (int)sub_boards.size(); i++)
         {
-            int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
+            int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn, moves.at(i));
             maxEval = std::max(maxEval, eval);
             if (maxEval >= beta)
             {
@@ -144,10 +180,9 @@ int AlphaBeta::play_research(const Board &board, int depth, int alpha, int beta,
     else
     {
         int minEval = INT_MAX;
-        std::vector<Board *> sub_boards = this->computeSubBoards(board);
         for (int i = 0; i < (int)sub_boards.size(); i++)
         {
-            int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn);
+            int eval = this->play_research(*sub_boards.at(i), depth - 1, alpha, beta, maxPawn, moves.at(i));
             minEval = std::min(minEval, eval);
             if (minEval <= alpha)
             {
