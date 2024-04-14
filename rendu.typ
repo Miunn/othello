@@ -53,12 +53,11 @@
 ])
 
 #align(center + horizon, text(12pt)[
-  Fondements de l'intelligence artificielle
-])
-
-#align(center + horizon, text(12pt)[
+  Fondements de l'intelligence artificielle \
   Boudadi Liam, Caulier Rémi
 ])
+
+#image("illustration.png")
 
 #align(right + bottom)[
   #image("assets/uphf.png", width: 40%)
@@ -86,6 +85,8 @@
 Ce papier vient rendre compte du développement et de l'implémentation de différents algorithmes dans le but de jouer au jeu de plateau d'Othello.
 
 On détaillera par la suite l'implémentation du jeu en `C++`, les différentes classes et structures de données mises en place afin de communiquer avec les différentes intelligences artificielles. On présentera ensuite les intelligences qui ont pu être implémentées ainsi que les stratégies mises en place.
+
+Pour la répartition de la charge de travail Rémi s'est occupé du développement de l'algorithme MinMax et Liam de l'élagage AlphaBeta. Nous avons développé le moteur de jeu à deux et rédigé nos parties respectives du rapport.
 
 == Architecture du projet <architecture>
 
@@ -722,7 +723,7 @@ Néanmoins, des parties étouffant rapidement l'adversaire ont été jouées en 
 
 La stratégie mixte combine les trois stratégies vues précédemment. L'algorithme joue suivant la matrice de poids statistiques pour les 25 premiers coups, ensuite considère les coins en maximisant ses propres coups et minimisant ceux de son adversaire et joue les 22 derniers coups en maximisant son score et minimisant celui de l'adversaire.
 
-Malgré les présumés défauts de notre heuristique de mobilité, la stratégie mixte affiche des résultat également convainquants en maitrisant une grande partie du plateau.
+Malgré les présumés défauts de notre heuristique de mobilité, la stratégie mixte affiche des résultat également convainquants en maitrisant une grande partie du plateau en jouant les noirs, @minmax_black_mixte, et les blancs, @minmax_white_mixte.
 
 #figure(
   rect(
@@ -743,7 +744,7 @@ Malgré les présumés défauts de notre heuristique de mobilité, la stratégie
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement MinMax - Random sur 50 parties pour une stratégie mixte"
-)
+) <minmax_black_mixte>
 
 #figure(
   rect(
@@ -764,9 +765,7 @@ Malgré les présumés défauts de notre heuristique de mobilité, la stratégie
   kind: figure,
   supplement: "Figure",
   caption: "Affrontement Random - MinMax sur 50 parties pour une stratégie mixte"
-)
-
-#pagebreak(weak: true)
+) <minmax_white_mixte>
 
 == AlphaBeta - Random
 
@@ -864,9 +863,11 @@ Malgré qu'AlphaBeta ne soit qu'un élagage de MinMax il semblerait que la moyen
 
 == AlphaBeta - AlphaBeta
 
-Etudions quelques parties jouées entre deux algorithmes AlphaBeta utilisant différentes stratégies. Les algorithmes étant déterministes, inutile de jouer plus d'une partie pour déterminer des statistiques étant donnée qu'elle seront tous identiques. Aussi, AlphaBeta une amélioration de l'algorithme MinMax nous regarderons uniquement des parties jouées entre AlphaBeta et AlphaBeta, par soucis de rapidité.
+Etudions quelques parties jouées entre deux algorithmes AlphaBeta utilisant différentes stratégies. Les algorithmes étant déterministes, inutile de jouer plus d'une partie pour déterminer des statistiques étant donnée qu'elle seront tous identiques. Aussi, AlphaBeta étant une amélioration de l'algorithme MinMax nous regarderons uniquement des parties jouées entre AlphaBeta et AlphaBeta, par soucis de rapidité.
 
 Intéressont nous donc à comment se comporte les différentes stratégies  entre elles pour des profondeurs variées.
+
+La @alphabeta_mob_pos montre un affrontement entre deux AlphaBeta de profondeur 6, les noirs utilisant la stratégie mobilité et les blancs utilisant une stratégie positionelle.
 
 #figure(
   rect(
@@ -908,7 +909,11 @@ Intéressont nous donc à comment se comporte les différentes stratégies  entr
   caption: "Affrontement AlphaBeta mobilité - Alphabeta positionnel"
 ) <alphabeta_mob_pos>
 
-Cela montre qu'en général la stratégie positionnel est plus efficace que la stratégie mobilité. On fera remarquer que la stratégie positionelle à une partie de mobilité en elle, étant donné que les coins sont pris en compte dans le score de 500.
+Les blancs gagnant la partie, cela montre qu'en général la stratégie positionnelle est plus efficace que la stratégie mobilité sur une partie complète. On fera remarquer que la stratégie positionelle à une partie de mobilité en elle, étant donné que les coins sont pris en compte dans le score de 500.
+
+#pagebreak(weak: true)
+
+Regardons maintenant un affrontement entre la stratégie mixte pour les noirs et positionelle pour les blancs, @alphabeta_mixte_pos.
 
 #figure(
   rect(
@@ -950,7 +955,11 @@ Cela montre qu'en général la stratégie positionnel est plus efficace que la s
   caption: "Affrontement Alphabeta mixte - Alphabeta positionnel"
 ) <alphabeta_mixte_pos>
 
-La stratégie mixte étant une amélioration de la stratégie positionelle en combinant les trois stratégies, ce résultat n'est pas étonnant. De plus cela montre que la stratégie mobilité a besoin d'être accompagnée pour bien fonctionner.
+Désormais la stratégie mixte l'emporte sur la stratégie positionelle. Combinant les trois types de stratégies (positionelle, mobilité et absolue), la stratégie mixte tire le meilleur de ces dernières. La victoire contre une stratégie positionelle indique que l'adaptation à l'avancée de la partie est primordiale. Contrairement à la défaite de la stratégie mobilité vu plus haut, cette fois-ci cette dernière, lorsqu'elle est accompagnée des deux autres stratégie mène à la vitoire. La stratégie de mobilité a donc besoin d'être accompagnée pour bien fonctionner.
+
+#pagebreak(weak: true)
+
+Intéressont nous à des profondeurs différentes pour une même stratégie. Regardons comment se débrouille la stratégie mobilité pour une profondeur de 10 contre une profondeur de 6, @alphabeta_mob_6_10.
 
 #figure(
   rect(
@@ -992,13 +1001,13 @@ La stratégie mixte étant une amélioration de la stratégie positionelle en co
   caption: "Comparaison de la stratégie mobilité pour des profondeurs de 6 pour les noirs et 10 pour les blancs"
 ) <alphabeta_mob_6_10>
 
-Pour des profondeurs différentes, on remarque que la stratégie mobilité est plus largement plus efficace pour une profondeur de 6 que pour une profondeur de 10. La majorité des coins et con du terrain sont pris par les blancs, ce qui est un signe de bonne stratégie.
+Sans surpise, pour des profondeurs différentes, on remarque que la stratégie mobilité est largement plus efficace pour une profondeur de 10 que pour une profondeur de 6. Cette fois-ci et contrairement à l'analyse faite plus haut de la stratégie mobilité utilisé par MinMax, l'algorithme dominant, jouant les blancs, occupe bien davantage l'espace du plateau (80% en moyenne). Les blancs dominent 3 des 4 coins du plateau et l'on remarque également que les pions noirs restant sont organisés suivant des diagonales. Ces dispositions sont un premier indice d'une partie maitrisée par les diagonales blanches.
+
+#pagebreak(weak: true)
 
 = Problèmes rencontrés
 
 Le projet ayant été développé en `C++` la gestion mémoire a été une priorité pendant toute la durée du développement. Quelques accès mémoire non autorisés ont parfois freiné notre progression ainsi qu'une fuite mémoire lors des appels récursifs avec l'allocation des noeuds fils. Néanmoins nous ne regrettons pas ce choix étant donné qu'il nous a permis d'allouer manuellement nos objets pour nous permettre de gérer nous-même l'utilisation mémoire de notre programme.
-
-#pagebreak(weak: true)
 
 = Perspectives d'amélioration et conclusion
 
